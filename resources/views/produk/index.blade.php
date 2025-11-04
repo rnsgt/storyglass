@@ -9,7 +9,7 @@
             @foreach ($products as $product)
                 <div class="col-md-3 col-sm-6">
                     <div class="card shadow-sm border-0 rounded-4 h-100 text-center">
-                        {{-- Gambar Produk --}}
+                        {{-- Gambar Produk Rafly --}}
                         <img src="{{ asset('image/' . $product->gambar) }}" 
                              alt="{{ $product->nama }}" 
                              class="card-img-top rounded-top-4" 
