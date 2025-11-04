@@ -26,7 +26,7 @@
                                 {{-- Tombol Beli Sekarang --}}
                                 <a href="{{ route('checkout.beli', $product->id) }}" 
                                    class="btn btn-success rounded-pill px-3">
-                                    Beli Sekarang
+                                    Beli Rafly Sekarang
                                 </a>
 
                                 {{-- Tombol Tambah Keranjang --}}
