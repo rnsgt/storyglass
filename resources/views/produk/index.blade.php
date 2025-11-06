@@ -9,7 +9,7 @@
             @foreach ($products as $product)
                 <div class="col-md-3 col-sm-6">
                     <div class="card shadow-sm border-0 rounded-4 h-100 text-center">
-                        {{-- Gambar Produk Rafly --}}
+                        {{-- Gambar Produk --}}
                         <img src="{{ asset('image/' . $product->gambar) }}" 
                              alt="{{ $product->nama }}" 
                              class="card-img-top rounded-top-4" 
@@ -26,14 +26,14 @@
                                 {{-- Tombol Beli Sekarang --}}
                                 <a href="{{ route('checkout.beli', $product->id) }}" 
                                    class="btn btn-success rounded-pill px-3">
-                                    Beli Sekarang boy1
+                                    Beli Sekarang
                                 </a>
 
                                 {{-- Tombol Tambah Keranjang --}}
                                 <form class="add-to-cart-form" data-id="{{ $product->id }}">
                                     @csrf
                                     <button class="btn btn-warning text-white rounded-pill px-3 add-to-cart-btn">
-                                        + Keranjangg biru
+                                        + Keranjang
                                     </button>
                                 </form>
                             </div>
