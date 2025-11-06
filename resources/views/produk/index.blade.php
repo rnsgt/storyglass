@@ -33,7 +33,7 @@
                                 <form class="add-to-cart-form" data-id="{{ $product->id }}">
                                     @csrf
                                     <button class="btn btn-warning text-white rounded-pill px-3 add-to-cart-btn">
-                                        + Keranjangg
+                                        + Keranjangg biru
                                     </button>
                                 </form>
                             </div>
