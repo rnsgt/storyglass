@@ -40,7 +40,6 @@
                         {{-- Formulir untuk mengurangi kuantitas --}}
                         <form action="{{ route('cart.update', $item->id) }}" method="POST">
                             @csrf
-                            @method('PUT')
                             <input type="hidden" name="action" value="decrease">
                             <button type="submit" class="btn btn-outline-secondary btn-sm rounded-0" style="width:30px;">-</button>
                         </form>
@@ -50,7 +49,6 @@
                         {{-- Formulir untuk menambah kuantitas --}}
                         <form action="{{ route('cart.update', $item->id) }}" method="POST">
                             @csrf
-                            @method('PUT')
                             <input type="hidden" name="action" value="increase">
                             <button type="submit" class="btn btn-outline-secondary btn-sm rounded-0" style="width:30px;">+</button>
                         </form>
