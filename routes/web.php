@@ -6,6 +6,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\ConfirmablePasswordController;
+use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\Auth\PasswordController;
 
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -42,7 +51,7 @@ Route::get('/checkout/beli/{id}', [CheckoutController::class, 'beli'])->name('ch
 Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
 
 //Dasboard
-Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+//Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
 // use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\HomeController;
@@ -75,3 +84,64 @@ Route::get('/dashboard', function () {return view('dashboard');})->name('dashboa
 // // 🔐 AUTH (LOGIN / REGISTER)
 // Route::get('/auth/login', fn() => view('auth.login'))->name('login');
 // Route::get('/auth/register', fn() => view('auth.register'))->name('register');
+
+Route::middleware('guest')->group(function () {
+    // Register
+    Route::get('register', [RegisteredUserController::class, 'create'])
+        ->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store']);
+
+    // Login
+    Route::get('login', [AuthenticatedSessionController::class, 'create'])
+        ->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+    // Forgot / request password reset
+    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+        ->name('password.request');
+    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+        ->name('password.email');
+
+    // Reset password form & submit
+    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
+        ->name('password.reset');
+    Route::post('reset-password', [NewPasswordController::class, 'store'])
+        ->name('password.store');
+});
+
+Route::middleware('auth')->group(function () {
+    // Email verification prompt & verification
+    Route::get('verify-email', EmailVerificationPromptController::class)
+        ->name('verification.notice');
+
+    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
+        ->middleware(['signed', 'throttle:6,1'])
+        ->name('verification.verify');
+
+    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+
+    // Confirm password
+    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
+        ->name('password.confirm');
+    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    // Update password (profile)
+    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
+
+    // Logout
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+        ->name('logout');
+});
+
+// 🔹 Login routes
+Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+
+// 🔹 Register routes
+Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'store']);
+
+// 🔹 Logout route
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

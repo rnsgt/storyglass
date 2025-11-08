@@ -28,8 +28,13 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
+        // Optional: hapus redirect lama
+        $request->session()->forget('url.intended');
+
+        // Arahkan ke halaman utama (desain kamu)
+        return redirect()->intended('/');
+}
+
 
     /**
      * Destroy an authenticated session.

@@ -89,7 +89,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('produk.index') }}">Produk</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Tentang</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 <li class="nav-item ms-3">
                     @php
                         use App\Models\Cart;
