@@ -18,7 +18,8 @@
                 @if($item->product)
                 <div class="d-flex border-bottom py-3 align-items-center">
                     {{-- Checkbox (Bisa dihilangkan jika Checkout langsung semua) --}}
-                    <input type="checkbox" class="form-check-input me-3" checked>
+                    <input type="checkbox" class="form-check-input me-3 item-checkbox"
+                      data-harga="{{ $item->product->harga * $item->quantity }}" checked>
 
                     {{-- Gambar Produk --}}
                     <img src="{{ asset('image/' . $item->product->gambar) }}" 
@@ -82,12 +83,12 @@
                             <div class="card-body">
                                 <h5 class="card-title fw-bold">Ringkasan Belanja</h5>
                                 <div class="d-flex justify-content-between my-2">
-                                    <span>Total Harga ({!! count($items) !!} Barang)</span>
-                                    <span>Rp{{ number_format($total, 0, ',', '.') }}</span>
+                                    <span id="total-barang-text">Total Harga ({!! count($items) !!} Barang)</span>
+                                    <span id="subtotal-text">Rp{{ number_format($total, 0, ',', '.') }}</span>
                                 </div>
                                 <div class="d-flex justify-content-between border-top pt-2 mt-2">
                                     <h5 class="mb-0">Total Pembayaran</h5>
-                                    <h5 class="text-danger fw-bold mb-0">Rp{{ number_format($total, 0, ',', '.') }}</h5>
+                                    <h5 id="total-text" class="text-danger fw-bold mb-0">Rp{{ number_format($total, 0, ',', '.') }}</h5>
                                 </div>
                                 <a href="{{ route('checkout.index') }}" class="btn btn-danger px-4 py-2 w-100 mt-3">
                                     Lanjut ke Checkout
@@ -103,4 +104,37 @@
         </div>
     </div>
 </div>
+{{-- SCRIPT: Hitung Total Otomatis Saat Checkbox Diklik --}}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const checkboxes = document.querySelectorAll('.item-checkbox');
+    const totalText = document.getElementById('total-text');
+    const subtotalText = document.getElementById('subtotal-text');
+    const totalBarangText = document.getElementById('total-barang-text');
+
+    const formatRupiah = (angka) => {
+        return 'Rp' + angka.toLocaleString('id-ID');
+    };
+
+    const updateTotal = () => {
+        let total = 0;
+        let jumlahBarang = 0;
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                total += parseInt(checkbox.dataset.harga);
+                jumlahBarang++;
+            }
+        });
+
+        totalText.textContent = formatRupiah(total);
+        subtotalText.textContent = formatRupiah(total);
+        totalBarangText.textContent = `Total Harga (${jumlahBarang} Barang)`;
+    };
+
+    checkboxes.forEach(cb => cb.addEventListener('change', updateTotal));
+    updateTotal(); // Jalankan saat pertama kali
+});
+</script>
+
 @endsection
