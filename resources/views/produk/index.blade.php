@@ -4,7 +4,9 @@
 <div class="container-fluid py-5" style="background-color: #CBE5E5; min-height: 100vh;">
     <div class="container">
         <h2 class="text-center fw-bold mb-5" style="color: #1E3A3A;">Koleksi Kacamata StoryGlass</h2>
-
+        @if(isset($keyword))
+    <p>Hasil pencarian untuk: <strong>{{ $keyword }}</strong></p>
+@endif
         <div class="row justify-content-center g-4">
             @foreach ($products as $product)
                 <div class="col-md-3 col-sm-6">
