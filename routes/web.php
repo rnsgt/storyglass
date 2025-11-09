@@ -55,7 +55,7 @@ Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('ch
 //Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
 // Search
-Route::get('/produk/cari', [ProdukController::class, 'cari'])->name('produk.cari');
+Route::get('/produk/cari', [ProductController::class, 'cari'])->name('produk.cari');
 
 
 // use Illuminate\Support\Facades\Route;
