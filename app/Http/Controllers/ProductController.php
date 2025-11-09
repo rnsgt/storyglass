@@ -1,28 +1,54 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // Tampilkan daftar produk (dengan search)
+    /**
+     * Menampilkan daftar produk, dengan fungsionalitas pencarian.
+     */
     public function index(Request $request)
     {
-        $q = $request->query('search');
-        if ($q) {
-            $products = Product::where('nama', 'like', "%{$q}%")->get();
-        } else {
-            $products = Product::all();
+        $keyword = $request->input('search');
+        $query = Product::query();
+
+        // Jika ada kata kunci pencarian, filter produk berdasarkan nama
+        if ($keyword) {
+            $query->where('nama', 'like', '%' . $keyword . '%');
         }
 
-        return view('produk.index', compact('products'));
+        $products = $query->get();
+
+        return view('produk.index', [
+            'products' => $products,
+            'keyword' => $keyword
+        ]);
     }
 
-    // Tampilkan detail produk
+    /**
+     * Menampilkan detail satu produk.
+     */
     public function show($id)
     {
         $product = Product::findOrFail($id);
-        return view('produk.detail', compact('product'));
+        return view('produk.detail', ['product' => $product]);
+    }
+
+    /**
+     * Fungsi cari yang mungkin tidak terpakai lagi, tapi kita biarkan saja.
+     */
+    public function cari(Request $request)
+    {
+        // Logika ini dipindahkan ke method index() untuk simplisitas
+        return $this->index($request);
     }
 }
+
+
+
+
+    
+
