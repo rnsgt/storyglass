@@ -91,7 +91,7 @@
                 <li class="nav-item"><a class="nav-link" href="#">Tentang</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 <li class="nav-item ms-3">
-                    @php
+                    @php 
                         use App\Models\Cart;
                         $cart = Cart::where('session_id', session()->getId())->with('items')->first();
                         $cartCount = $cart ? $cart->items->sum('quantity') : 0;

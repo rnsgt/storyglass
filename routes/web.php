@@ -31,6 +31,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Produk 🛍️
 Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
+Route::get('/produk/cari', [ProductController::class, 'cari'])->name('produk.cari');
 Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
 // Route::get('/produk/{id}', [ProductController::class, 'show'])->middleware('auth');
 // Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.show');
@@ -52,6 +53,10 @@ Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('ch
 
 //Dasboard
 //Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+
+// Search
+Route::get('/produk/cari', [ProdukController::class, 'cari'])->name('produk.cari');
+
 
 // use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\HomeController;
@@ -109,32 +114,6 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
-Route::middleware('auth')->group(function () {
-    // Email verification prompt & verification
-    Route::get('verify-email', EmailVerificationPromptController::class)
-        ->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', VerifyEmailController::class)
-        ->middleware(['signed', 'throttle:6,1'])
-        ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-        ->middleware('throttle:6,1')
-        ->name('verification.send');
-
-    // Confirm password
-    Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
-        ->name('password.confirm');
-    Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
-
-    // Update password (profile)
-    Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-
-    // Logout
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
-});
-
 // 🔹 Login routes
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store']);
@@ -145,3 +124,5 @@ Route::post('/register', [RegisteredUserController::class, 'store']);
 
 // 🔹 Logout route
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+
