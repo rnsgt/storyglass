@@ -43,7 +43,7 @@ Route::get('/checkout/beli/{id}', [CheckoutController::class, 'beli'])->name('ch
 Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
 
 //Dasboard
-Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+// Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
 // Search
 Route::get('/produk/cari', [ProductController::class, 'cari'])->name('produk.cari');

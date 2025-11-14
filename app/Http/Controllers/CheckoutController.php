@@ -2,13 +2,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 
 class CheckoutController extends Controller
 {
     public function index()
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
@@ -20,7 +21,7 @@ class CheckoutController extends Controller
 
     public function beli($id)
     {
-        if (!auth()->check()) {
+        if (!Auth::check()) {
             return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
         }
 
