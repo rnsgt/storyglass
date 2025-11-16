@@ -9,7 +9,7 @@
                 <div class="text-center py-5">
                     <h5 class="mt-3 text-muted">Keranjang belanjamu masih kosong 🛒</h5>
                     {{-- Arahkan ke rute produk Anda --}}
-                    <a href="{{ route('produk.index') }}" class="btn btn-warning mt-3 text-white">Belanja Sekarang</a>
+                     <a href="{{ route('produk.index') }}" class="btn btn-warning mt-3 text-white">Belanja Sekarang</a>
                 </div>
             @else
             

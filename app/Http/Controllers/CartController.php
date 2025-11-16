@@ -42,30 +42,36 @@ class CartController extends Controller
 
     public function add(Request $request, $id)
     {
+        // Ambil produk berdasarkan id
         $product = Product::findOrFail($id);
 
-        // Ambil / buat cart untuk user login atau session
+        // Ambil cart berdasarkan user login atau session
         $cart = Cart::firstOrCreate([
-            'session_id' => session()->getId(),
+            'user_id' => Auth::check() ? Auth::id() : null,
+            'session_id' => Session::getId(),
         ]);
 
-        // Cek apakah produk sudah ada di cart
+        // Cari item apakah sudah ada di cart
         $item = $cart->items()->where('product_id', $product->id)->first();
 
         if ($item) {
-            $item->quantity += 1;
-            $item->save();
+            // Jika sudah ada → tambah quantity
+            $item->update([
+                'quantity' => $item->quantity + 1,
+            ]);
         } else {
+            // Jika belum ada → buat cart item baru
             $cart->items()->create([
                 'product_id' => $product->id,
                 'quantity' => 1,
+                'price' => $product->harga, // Simpan harga produk
             ]);
         }
 
-        // Hitung total barang di keranjang
+        // Hitung ulang total barang
         $cartCount = $cart->items()->sum('quantity');
 
-        // Kalau request datang dari AJAX → kirim data JSON
+        // Jika request via AJAX → kirim JSON
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -74,7 +80,7 @@ class CartController extends Controller
             ]);
         }
 
-        // Fallback kalau bukan AJAX
+        // Jika bukan AJAX → redirect
         return redirect()->back()->with('success', 'Produk berhasil ditambahkan ke keranjang!');
     }
 
