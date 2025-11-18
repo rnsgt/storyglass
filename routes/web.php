@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\ProductAdminController;
@@ -28,6 +29,7 @@ Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.det
 // Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.show');
 
 // Profil
+Route::get('/tentang', [PageController::class, 'tentang'])->name('tentang');
 
 
 // Keranjang 🛒
