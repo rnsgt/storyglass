@@ -35,14 +35,12 @@
                 <p class="text-muted">{{ $product->deskripsi ?? 'Belum ada deskripsi untuk produk ini.' }}</p>
 
                 <div class="mt-4 d-flex gap-3">
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form">
-                        @csrf
-                        <button type="submit" class="btn btn-warning text-white rounded-pill px-3">
-                            + Keranjang
-                        </button>
-                    </form>
-
-                    
+                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form">
+                    @csrf
+                    <button type="submit" class="btn btn-warning text-white rounded-pill px-3">
+                        + Keranjang
+                    </button>
+                </form>
                     <a href="{{ route('checkout.beli', $product->id) }}" class="btn btn-danger rounded-pill px-4">
                         <i class="bi bi-bag-fill"></i> Beli Sekarang
                     </a>

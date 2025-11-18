@@ -41,7 +41,9 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 Route::get('/checkout/beli/{id}', [CheckoutController::class, 'beli'])->name('checkout.beli');
 Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
-
+Route::get('/checkout/qris/{order}', [CheckoutController::class, 'qris'])->name('checkout.qris');
+Route::get('/checkout/status/{order}', [CheckoutController::class, 'status'])->name('checkout.status');
+Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 //Dasboard
 // Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 

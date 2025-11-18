@@ -5,7 +5,7 @@
     <div class="card shadow-sm border-0">
         <div class="card-body">
 
-            @if($items->isEmpty())
+            @if(empty($items) || count($items) === 0)
                 <div class="text-center py-5">
                     <h5 class="mt-3 text-muted">Keranjang belanjamu masih kosong 🛒</h5>
                     {{-- Arahkan ke rute produk Anda --}}
