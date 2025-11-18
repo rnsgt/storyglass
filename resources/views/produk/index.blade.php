@@ -32,9 +32,9 @@
                                 </a>
 
                                 {{-- Tombol Tambah Keranjang --}}
-                                <form class="add-to-cart-form" data-id="{{ $product->id }}">
+                                <form action="{{ route('cart.add', $product->id) }}" method="POST" class="add-to-cart-form">
                                     @csrf
-                                    <button class="btn btn-warning text-white rounded-pill px-3 add-to-cart-btn">
+                                    <button type="submit" class="btn btn-warning text-white rounded-pill px-3">
                                         + Keranjang
                                     </button>
                                 </form>

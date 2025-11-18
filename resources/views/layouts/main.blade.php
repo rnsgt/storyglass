@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         body {
-            background-color: #c4e2e0; /* warna yang kamu minta */
+            background-color: #c4e2e0;
             font-family: 'Poppins', sans-serif;
         }
         nav {
@@ -69,7 +69,6 @@
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand fw-bold" href="{{ route('home') }}">StoryGlass</a>
-            <!-- 🔍 Form Pencarian -->
             <form id="searchForm" action="{{ route('produk.index') }}" method="GET" class="d-flex w-50 mx-3" onsubmit="return validateSearch()">
                 <input id="searchInput" type="text" name="search" class="form-control me-2" placeholder="Cari produk..." value="{{ request('search') }}">
                 <button type="submit" class="btn">Cari</button>
@@ -89,9 +88,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('produk.index') }}">Produk</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
-                 <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Tentang</a></li>
-                <li class="nav-item ms-3">
 
                 @guest
                     @if (Route::has('register'))
@@ -112,20 +109,20 @@
                     </li>
                 @endguest
 
-                <li class="nav-item ms-3"></li>
-                    @php 
-                        use App\Models\Cart;
-                        $cart = Cart::where('session_id', session()->getId())->with('items')->first();
-                        $cartCount = $cart ? $cart->items->sum('quantity') : 0;
-                    @endphp
-
+                <li class="nav-item ms-3">
                     <a href="{{ route('cart.index') }}" class="position-relative">
-                        <i class="bi bi-cart fs-4 text-dark"></i>
-                        <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ $cartCount }}
-                        </span>
+                        <i class="bi bi-cart3 fs-4"></i>
+                        @php
+                            $cartCount = session()->has('cart') ? count(session('cart')) : 0;
+                        @endphp
+                        @if($cartCount > 0)
+                            <span id="cart-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle">
+                                {{ $cartCount }}
+                            </span>
+                        @else
+                            <span id="cart-count" class="badge bg-danger position-absolute top-0 start-100 translate-middle" style="display: none;">0</span>
+                        @endif
                     </a>
-                    
                 </li>
             </ul>
         </div>
@@ -160,10 +157,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    // Update badge angka di ikon keranjang
-                    document.getElementById('cart-count').textContent = data.cartCount;
+                    const badge = document.getElementById('cart-count');
+                    badge.textContent = data.cartCount;
+                    
+                    if (data.cartCount > 0) {
+                        badge.style.display = 'inline-block';
+                    }
 
-                    // Notifikasi kecil (opsional)
                     alert(data.message);
                 }
             })

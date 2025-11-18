@@ -9,34 +9,28 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot()
     {
-        // Komposisikan variabel $cartCount ke semua views yang menggunakan 'layouts.main'
         View::composer('layouts.main', function ($view) {
-            $cartCount = 0;
-            
-            if (Auth::check()) {
-                // Pengguna terautentikasi: hitung dari cart_items berdasarkan user_id
-                $cartCount = Cart::where('user_id', Auth::id())
-                                ->withCount('items') // Hitung jumlah items
-                                ->first()?->items_count ?? 0;
+            // hitung dari session (guest)
+            $sessionCart = session()->get('cart', []);
+            $sessionCount = array_sum(array_map(fn($i) => (int) ($i['quantity'] ?? $i['jumlah'] ?? 1), $sessionCart));
 
-            } else {
-                // Pengguna Guest: hitung dari cart_items berdasarkan session_id
-                $cartCount = Cart::where('session_id', session()->getId())
+            if (Auth::check()) {
+                // hitung dari DB untuk user terautentikasi (pastikan relasi items() ada)
+                $dbCount = Cart::where('user_id', Auth::id())
                                 ->withCount('items')
                                 ->first()?->items_count ?? 0;
+
+                // Pilih salah satu: gunakan DB count atau gabungkan session+DB.
+                $cartCount = $dbCount;
+            } else {
+                $cartCount = $sessionCount;
             }
 
             $view->with('cartCount', $cartCount);
