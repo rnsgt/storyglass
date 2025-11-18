@@ -2,23 +2,31 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Cart;
+use App\Models\Product;
 use App\Models\CartItem;
+use Illuminate\Database\Seeder;
 
 class CartItemSeeder extends Seeder
 {
     public function run(): void
     {
-        CartItem::create([
-            'cart_id' => 1,          // pastikan ID ini ada di tabel carts
-            'product_id' => 1,       // pastikan product_id juga ada di tabel products
-            'quantity' => 2,
-        ]);
+        // Ambil cart pertama sebagai contoh
+        $cart = Cart::first();
+        
+        // Ambil beberapa produk untuk dijadikan dummy item
+        $products = Product::take(4)->get();
 
-        CartItem::create([
-            'cart_id' => 1,
-            'product_id' => 2,
-            'quantity' => 1,
-        ]);
+        // Pastikan ada cart dan produk sebelum insert
+        if ($cart && $products->count() > 0) {
+            foreach ($products as $product) {
+                CartItem::create([
+                    'cart_id'    => $cart->id,
+                    'product_id' => $product->id,
+                    'quantity'   => rand(1, 3), // Random quantity 1-3
+                    'price'      => $product->harga, // <--- TAMBAHKAN INI: Ambil harga dari produk
+                ]);
+            }
+        }
     }
 }
