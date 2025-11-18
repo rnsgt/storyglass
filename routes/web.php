@@ -22,7 +22,6 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Produk 🛍️
 Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
-Route::get('/produk/cari', [ProductController::class, 'cari'])->name('produk.cari');
 Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
 // Route::get('/produk/{id}', [ProductController::class, 'show'])->middleware('auth');
 // Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.show');
@@ -43,11 +42,7 @@ Route::get('/checkout/beli/{id}', [CheckoutController::class, 'beli'])->name('ch
 Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('checkout.proses');
 
 //Dasboard
-// Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
-
-// Search
-Route::get('/produk/cari', [ProductController::class, 'cari'])->name('produk.cari');
-
+Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
 // use Illuminate\Support\Facades\Route;
 // use App\Http\Controllers\HomeController;
@@ -80,5 +75,3 @@ Route::get('/produk/cari', [ProductController::class, 'cari'])->name('produk.car
 // // 🔐 AUTH (LOGIN / REGISTER)
 // Route::get('/auth/login', fn() => view('auth.login'))->name('login');
 // Route::get('/auth/register', fn() => view('auth.register'))->name('register');
-// 🔐 AUTH (LOGIN / REGISTER)
-require __DIR__.'/auth.php';
