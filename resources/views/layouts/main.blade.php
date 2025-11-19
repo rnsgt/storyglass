@@ -89,6 +89,7 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('produk.index') }}">Produk</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('tentang') }}">Tentang</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('chatbot') }}">Chatbot</a></li>
 
                 @guest
                     @if (Route::has('register'))

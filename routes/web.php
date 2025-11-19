@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\Admin\ProductAdminController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -41,5 +42,28 @@ Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('c
 //Dasboard
 Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
+Route::get('/chatbot', function () {
+    return view('chatbot');
+})->name('chatbot');
+
+Route::post('/chatbot/send', function (Request $request) {
+
+    $msg = strtolower($request->message);
+
+    if (str_contains($msg, 'bulat')) {
+        return response()->json([
+            'reply' => 'Oke! Berikut rekomendasi kacamata untuk wajah bulat.',
+            'product' => [
+                'name' => 'Kacamata Aviator',
+                'price' => '149.000',
+                'image' => '/images/aviator.jpg',
+            ]
+        ]);
+    }
+
+    return response()->json([
+        'reply' => 'Maaf, saya belum mengerti. Coba ketik: "kacamata untuk wajah bulat".'
+    ]);
+});
 
 
