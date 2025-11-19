@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [ProductAdminController::class, 'index'])->name('dashboard');
+    Route::get('/products', [ProductAdminController::class, 'listProducts'])->name('products.list');
+    Route::resource('products', ProductAdminController::class)->except(['show', 'index']);
+});
+
 // Produk 🛍️
 Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
 Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
@@ -33,18 +39,13 @@ Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('ch
 Route::get('/checkout/qris/{order}', [CheckoutController::class, 'qris'])->name('checkout.qris');
 Route::get('/checkout/status/{order}', [CheckoutController::class, 'status'])->name('checkout.status');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
-//Dasboard
-Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
-<<<<<<< HEAD
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [ProductAdminController::class, 'index'])->name('dashboard');
-    Route::resource('products', ProductAdminController::class); 
-=======
+//Dasboard
+Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+
 Route::get('/chatbot', function () {
     return view('chatbot');
 })->name('chatbot');
-
 Route::post('/chatbot/send', function (Request $request) {
 
     $msg = strtolower($request->message);
@@ -63,7 +64,6 @@ Route::post('/chatbot/send', function (Request $request) {
     return response()->json([
         'reply' => 'Maaf, saya belum mengerti. Coba ketik: "kacamata untuk wajah bulat".'
     ]);
->>>>>>> 686109c09583ba431c14e20514adeac510e69424
 });
 
 // 🔐 AUTH (LOGIN / REGISTER)
