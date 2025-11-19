@@ -11,18 +11,12 @@ use Illuminate\Support\Facades\Route;
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// 🔐 AUTH (LOGIN / REGISTER)
-require __DIR__.'/auth.php';
-
-
 // Produk 🛍️
 Route::get('/produk', [ProductController::class, 'index'])->name('produk.index');
 Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.detail');
 
-
 // Profil
 Route::get('/tentang', [PageController::class, 'tentang'])->name('tentang');
-
 
 // Keranjang 🛒
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -41,5 +35,10 @@ Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('c
 //Dasboard
 Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
 
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [ProductAdminController::class, 'index'])->name('dashboard');
+    Route::resource('products', ProductAdminController::class); 
+});
 
-
+// 🔐 AUTH (LOGIN / REGISTER)
+require __DIR__.'/auth.php';
