@@ -89,7 +89,6 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('produk.index') }}">Produk</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('tentang') }}">Tentang</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('chatbot') }}">Chatbot</a></li>
 
                 @guest
                     @if (Route::has('register'))
@@ -140,6 +139,36 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Floating Chat Button -->
+    <a href="{{ route('chatbot') }}" class="chatbot-btn">
+        <i class="bi bi-chat-dots"></i>
+    </a>
+
+    <style>
+    .chatbot-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #38969fff;
+        color: white;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        z-index: 999;
+        transition: 0.3s;
+    }
+    .chatbot-btn:hover {
+        background-color: #3b595bff;
+        transform: scale(1.05);
+    }
+    </style>
+
 </body>
 <script>
     document.querySelectorAll('.add-to-cart-btn').forEach(button => {
