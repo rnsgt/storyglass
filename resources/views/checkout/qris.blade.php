@@ -6,7 +6,7 @@
   <p>Scan QR berikut dengan aplikasi e‑wallet / bank Anda:</p>
 
   <div class="card p-4 text-center">
-    <img src="{{ $qrcodeUrl }}" alt="QRIS" style="max-width:320px; margin: 0 auto;">
+    <img src="{{ asset($qrcodeUrl) }}" alt="QRIS" style="max-width:320px; margin: 0 auto;">
     <p class="mt-3"><strong>Total: Rp {{ number_format($order->total ?? 0, 0, ',', '.') }}</strong></p>
     <p id="status" class="text-muted">Menunggu pembayaran...</p>
   </div>

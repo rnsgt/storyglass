@@ -83,7 +83,7 @@ class CheckoutController extends Controller
     {
         $order = \App\Models\Order::findOrFail($orderId); // sesuaikan model
         // generate / ambil URL gambar QRIS dari gateway atau buat QR lokal
-        $qrcodeUrl = asset('storage/qris/' . $order->id . '.png'); // contoh
+        $qrcodeUrl = asset('image/qris1.jpeg'); // contoh
         return view('checkout.qris', compact('order','qrcodeUrl'));
     }
 
