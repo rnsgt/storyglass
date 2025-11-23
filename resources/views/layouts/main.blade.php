@@ -87,22 +87,49 @@
             <ul class="navbar-nav ms-auto align-items-center">
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('produk.index') }}">Produk</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('tentang') }}">Tentang</a></li>
 
                 @guest
+                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
                     @if (Route::has('register'))
+                        <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Register</a></li>
                     @endif
                 @else
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            {{ Auth::user()->name }}
+                            <i class="bi bi-person-circle"></i> {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            @if(Auth::user()->role === 'admin')
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.dashboard') }}">
+                                        <i class="bi bi-speedometer2"></i> Admin Dashboard
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                            @endif
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profile.index') }}">
+                                    <i class="bi bi-person-circle"></i> Profil Saya
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('orders.index') }}">
+                                    <i class="bi bi-bag-check"></i> Pesanan Saya
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('home') }}">
+                                    <i class="bi bi-house-door"></i> Home
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">Logout</a>
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </a>
                                 </form>
                             </li>
                         </ul>

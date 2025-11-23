@@ -106,7 +106,8 @@
                         <select name="status" id="status" class="form-select">
                             <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending (Menunggu Bayar)</option>
                             <option value="processing" {{ $order->status == 'processing' ? 'selected' : '' }}>Processing (Sedang Dikemas)</option>
-                            <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed (Selesai/Dikirim)</option>
+                            <option value="shipped" {{ $order->status == 'shipped' ? 'selected' : '' }}>Shipped (Dalam Perjalanan)</option>
+                            <option value="completed" {{ $order->status == 'completed' ? 'selected' : '' }}>Completed (Selesai)</option>
                             <option value="cancelled" {{ $order->status == 'cancelled' ? 'selected' : '' }}>Cancelled (Dibatalkan)</option>
                         </select>
                     </div>

@@ -33,6 +33,7 @@
                             <span class="badge status-{{ $order->status }}">
                                 @if($order->status == 'pending') Menunggu Bayar
                                 @elseif($order->status == 'processing') Sedang Dikemas
+                                @elseif($order->status == 'shipped') Dalam Perjalanan
                                 @elseif($order->status == 'completed') Selesai
                                 @elseif($order->status == 'cancelled') Dibatalkan
                                 @else {{ ucfirst($order->status) }}

@@ -5,15 +5,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
+use Symfony\Component\HttpKernel\Profiler\Profile;
 use App\Http\Controllers\Admin\OrderAdminController;
 use App\Http\Controllers\Admin\ProductAdminController;
 
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Admin Login
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [ProductAdminController::class, 'index'])->name('dashboard');
     Route::get('/products', [ProductAdminController::class, 'listProducts'])->name('products.list');
@@ -27,6 +31,21 @@ Route::get('/produk/{id}', [ProductController::class, 'show'])->name('produk.det
 
 // Profil
 Route::get('/tentang', [PageController::class, 'tentang'])->name('tentang');
+
+// Profile Management
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // Address Management
+    Route::get('/profile/addresses/create', [ProfileController::class, 'createAddress'])->name('profile.addresses.create');
+    Route::post('/profile/addresses', [ProfileController::class, 'storeAddress'])->name('profile.addresses.store');
+    Route::get('/profile/addresses/{address}/edit', [ProfileController::class, 'editAddress'])->name('profile.addresses.edit');
+    Route::put('/profile/addresses/{address}', [ProfileController::class, 'updateAddress'])->name('profile.addresses.update');
+    Route::delete('/profile/addresses/{address}', [ProfileController::class, 'destroyAddress'])->name('profile.addresses.destroy');
+    Route::put('/profile/addresses/{address}/set-default', [ProfileController::class, 'setDefaultAddress'])->name('profile.addresses.setDefault');
+});
 
 // Keranjang 🛒
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
@@ -43,9 +62,13 @@ Route::get('/checkout/qris/{order}', [CheckoutController::class, 'qris'])->name(
 Route::get('/checkout/status/{order}', [CheckoutController::class, 'status'])->name('checkout.status');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
 
-//Dasboard
-Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
+// Orders
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+});
 
+// Chatbot AI
 Route::post('/chatbot/send', [ChatbotController::class, 'send']);
 
 Route::get('/chatbot', function () {
