@@ -50,9 +50,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 });
 
-//Dasboard
-Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
-
+// Chatbot AI
 Route::post('/chatbot/send', [ChatbotController::class, 'send']);
 
 Route::get('/chatbot', function () {
