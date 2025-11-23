@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\Admin\ProductAdminController;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\ChatbotController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\Admin\OrderAdminController;
+use App\Http\Controllers\Admin\ProductAdminController;
 
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -17,6 +18,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/dashboard', [ProductAdminController::class, 'index'])->name('dashboard');
     Route::get('/products', [ProductAdminController::class, 'listProducts'])->name('products.list');
     Route::resource('products', ProductAdminController::class)->except(['show', 'index']);
+    Route::resource('orders', OrderAdminController::class)->only(['index', 'show', 'update']);
 });
 
 // Produk 🛍️

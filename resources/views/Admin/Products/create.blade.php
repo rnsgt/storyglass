@@ -1,9 +1,4 @@
-@extends('layouts.admin')
-
-@section('title', 'Tambah Produk')
-@section('page-title', 'Tambah Produk Baru')
-
-@section('content')
+<x-admin-layout title="Tambah Produk" page-title="Tambah Produk Baru">
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-8">
@@ -71,4 +66,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-admin-layout>

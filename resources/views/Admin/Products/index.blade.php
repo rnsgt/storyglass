@@ -1,9 +1,4 @@
-@extends('layouts.admin')
-
-@section('title', 'Manajemen Produk')
-@section('page-title', 'Manajemen Produk')
-
-@section('content')
+<x-admin-layout title="Manajemen Produk" page-title="Manajemen Produk">
 <div class="container-fluid">
     <div class="table-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -79,4 +74,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-admin-layout>

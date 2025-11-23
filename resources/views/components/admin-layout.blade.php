@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin Dashboard') | StoryGlass Admin</title>
+    <title>{{ $title ?? 'Admin Dashboard' }} | StoryGlass Admin</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
@@ -225,12 +225,37 @@
             background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%) !important;
         }
 
+        .badge.bg-info {
+            background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%) !important;
+        }
+
         /* Table Hover */
         .table-hover tbody tr:hover {
             background-color: rgba(132, 169, 172, 0.1);
         }
+
+        /* Status Badge Styling */
+        .status-pending {
+            background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);
+            color: white;
+        }
+
+        .status-processing {
+            background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+            color: white;
+        }
+
+        .status-completed {
+            background: linear-gradient(135deg, #3cb371 0%, #5fcc8b 100%);
+            color: white;
+        }
+
+        .status-cancelled {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
     </style>
-    @stack('styles')
+    {{ $styles ?? '' }}
 </head>
 <body>
     <!-- Sidebar -->
@@ -271,7 +296,7 @@
 
     <!-- Navbar -->
     <nav class="admin-navbar">
-        <h4>@yield('page-title', 'Dashboard')</h4>
+        <h4>{{ $pageTitle ?? 'Dashboard' }}</h4>
         <div class="user-menu">
             <div class="dropdown">
                 <a class="user-info dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" style="text-decoration: none; color: #333;">
@@ -314,10 +339,10 @@
             </div>
         @endif
 
-        @yield('content')
+        {{ $slot }}
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    @stack('scripts')
+    {{ $scripts ?? '' }}
 </body>
 </html>

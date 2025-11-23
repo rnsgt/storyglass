@@ -1,9 +1,4 @@
-@extends('layouts.admin')
-
-@section('title', 'Dashboard Admin')
-@section('page-title', 'Dashboard')
-
-@section('content')
+<x-admin-layout title="Dashboard Admin" page-title="Dashboard">
 <div class="container-fluid">
     <div class="row g-4 mb-4">
         <!-- Stat Card 1 -->
@@ -127,4 +122,4 @@
         </div>
     </div>
 </div>
-@endsection
+</x-admin-layout>
