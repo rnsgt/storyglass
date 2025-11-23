@@ -1,67 +1,98 @@
 @extends('layouts.main')
 
+@section('title', 'Detail Pesanan')
+
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen">
-    <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-        
-        <div class="mb-6 px-4 sm:px-0">
-            <a href="{{ route('orders.index') }}" class="text-gray-500 hover:text-gray-700 text-sm mb-2 block">&larr; Kembali ke Riwayat</a>
-            <h2 class="font-bold text-2xl text-gray-800">Detail Pesanan #{{ $order->id }}</h2>
+<div class="container py-5" style="min-height: 80vh;">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary btn-sm mb-3">
+                <i class="bi bi-arrow-left"></i> Kembali ke Riwayat
+            </a>
+            <h2 class="fw-bold"><i class="bi bi-receipt"></i> Detail Pesanan #{{ $order->id }}</h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mx-4 sm:mx-0">
-            <!-- Kolom Utama -->
-            <div class="md:col-span-2 space-y-6">
-                <!-- Daftar Produk -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-800">Produk Dibeli</h3>
-                    <ul class="divide-y divide-gray-100">
+        <div class="col-lg-8">
+            <!-- Daftar Produk -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4"><i class="bi bi-box-seam"></i> Produk Dibeli</h5>
+                    <div class="list-group list-group-flush">
                         @foreach($order->items as $item)
-                        <li class="py-4 flex gap-4">
-                            <img src="{{ $item->product && $item->product->image ? asset('storage/' . $item->product->image) : 'https://via.placeholder.com/100' }}" 
-                                 class="w-20 h-20 object-cover rounded bg-gray-100 flex-none">
-                            <div class="flex-1">
-                                <h4 class="font-medium text-gray-900">{{ $item->product->nama ?? 'Produk Dihapus' }}</h4>
-                                <p class="text-sm text-gray-500">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</p>
+                        <div class="list-group-item px-0 py-3">
+                            <div class="row align-items-center">
+                                <div class="col-auto">
+                                    <img src="{{ $item->product && $item->product->image ? asset('storage/' . $item->product->image) : 'https://via.placeholder.com/80' }}" 
+                                         class="rounded" 
+                                         style="width: 80px; height: 80px; object-fit: cover;"
+                                         alt="{{ $item->product->nama ?? 'Produk' }}">
+                                </div>
+                                <div class="col">
+                                    <h6 class="fw-bold mb-1">{{ $item->product->nama ?? 'Produk Dihapus' }}</h6>
+                                    <small class="text-muted">{{ $item->quantity }} x Rp {{ number_format($item->price, 0, ',', '.') }}</small>
+                                </div>
+                                <div class="col-auto">
+                                    <h6 class="fw-bold mb-0" style="color: #558b8b;">
+                                        Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}
+                                    </h6>
+                                </div>
                             </div>
-                            <div class="font-bold text-gray-900">
-                                Rp {{ number_format($item->price * $item->quantity, 0, ',', '.') }}
-                            </div>
-                        </li>
+                        </div>
                         @endforeach
-                    </ul>
-                </div>
-
-                <!-- Info Pengiriman -->
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="font-bold text-lg mb-2 text-gray-800">Alamat Pengiriman</h3>
-                    <p class="text-gray-600 leading-relaxed">{{ $order->shipping_address }}</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Kolom Ringkasan -->
-            <div class="space-y-6">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-800">Ringkasan</h3>
+            <!-- Info Pengiriman -->
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt"></i> Alamat Pengiriman</h5>
+                    <p class="mb-0" style="white-space: pre-line;">{{ $order->shipping_address }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kolom Ringkasan -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4"><i class="bi bi-info-circle"></i> Ringkasan</h5>
                     
-                    <div class="flex justify-between mb-2 text-gray-600">
-                        <span>Status</span>
-                        <span class="font-bold uppercase text-indigo-600">{{ $order->status }}</span>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Status</span>
+                        @php
+                            $statusConfig = [
+                                'pending' => ['badge' => 'bg-warning', 'text' => 'Menunggu Pembayaran'],
+                                'processing' => ['badge' => 'bg-info', 'text' => 'Sedang Diproses'],
+                                'completed' => ['badge' => 'bg-success', 'text' => 'Selesai'],
+                                'cancelled' => ['badge' => 'bg-danger', 'text' => 'Dibatalkan'],
+                            ];
+                            $status = $statusConfig[$order->status] ?? ['badge' => 'bg-secondary', 'text' => ucfirst($order->status)];
+                        @endphp
+                        <span class="badge {{ $status['badge'] }}">{{ $status['text'] }}</span>
                     </div>
                     
-                    <div class="flex justify-between mb-2 text-gray-600">
-                        <span>Metode Bayar</span>
-                        <span class="font-bold">{{ strtoupper($order->payment_method) }}</span>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Tanggal Order</span>
+                        <span class="fw-bold">{{ $order->created_at->format('d M Y') }}</span>
                     </div>
 
-                    <div class="border-t my-4 pt-4 flex justify-between items-center">
-                        <span class="font-bold text-gray-800">Total Bayar</span>
-                        <span class="font-bold text-xl text-indigo-600">Rp {{ number_format($order->total_price, 0, ',', '.') }}</span>
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center py-3">
+                        <h6 class="fw-bold mb-0">Total Bayar</h6>
+                        <h4 class="fw-bold mb-0" style="color: #558b8b;">
+                            Rp {{ number_format($order->total_price, 0, ',', '.') }}
+                        </h4>
                     </div>
 
                     @if($order->status == 'pending')
-                    <div class="mt-4 p-3 bg-yellow-50 text-yellow-800 text-sm rounded border border-yellow-200">
-                        Silakan selesaikan pembayaran agar pesanan segera diproses.
+                    <div class="alert alert-warning mt-3 mb-0">
+                        <small><i class="bi bi-exclamation-triangle"></i> Silakan selesaikan pembayaran agar pesanan segera diproses.</small>
+                    </div>
+                    @elseif($order->status == 'completed')
+                    <div class="alert alert-success mt-3 mb-0">
+                        <small><i class="bi bi-check-circle"></i> Pesanan telah selesai. Terima kasih sudah berbelanja!</small>
                     </div>
                     @endif
                 </div>

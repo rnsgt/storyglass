@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
         ProductSeeder::class,  // 1. Jalankan Induk (Produk) dulu
         CartSeeder::class,     // 2. Jalankan Induk (Keranjang)
         CartItemSeeder::class, // 3. Baru jalankan Anak (Item Keranjang)
-        AdminUserSeeder::class, // 4. Buat user admin
+        UserSeeder::class, // 4. Buat user admin dan user biasa
         ]);
     }
 

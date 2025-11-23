@@ -1,87 +1,100 @@
 @extends('layouts.main')
 
+@section('title', 'Riwayat Pesanan')
+
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        
-        <div class="mb-6 px-4 sm:px-0">
-            <h2 class="font-bold text-2xl text-gray-800">Riwayat Pesanan Saya</h2>
-            <p class="text-gray-600">Pantau status belanjaan King di sini.</p>
-        </div>
+<div class="container py-5" style="min-height: 80vh;">
+    <div class="row">
+        <div class="col-12">
+            <div class="mb-4">
+                <h2 class="fw-bold mb-2"><i class="bi bi-clock-history"></i> Riwayat Pesanan Saya</h2>
+                <p class="text-muted">Pantau status belanjaan kamu di sini.</p>
+            </div>
 
-        <div class="space-y-6 mx-4 sm:mx-0">
+            <div class="row g-4">
             @forelse($orders as $order)
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg border border-gray-200">
-                    <div class="p-6">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center mb-4 border-b pb-4">
-                            <div>
-                                <p class="text-sm text-gray-500">No. Order</p>
-                                <p class="font-bold text-gray-800">#{{ $order->id }}</p>
-                            </div>
-                            <div class="mt-2 md:mt-0">
-                                <p class="text-sm text-gray-500">Tanggal</p>
-                                <p class="font-medium">{{ $order->created_at->format('d M Y') }}</p>
-                            </div>
-                            <div class="mt-2 md:mt-0">
-                                <p class="text-sm text-gray-500">Total Belanja</p>
-                                <p class="font-bold text-indigo-600">Rp {{ number_format($order->total_price, 0, ',', '.') }}</p>
-                            </div>
-                            <div class="mt-2 md:mt-0">
-                                <p class="text-sm text-gray-500 mb-1">Status</p>
-                                @php
-                                    $statusClasses = [
-                                        'pending' => 'bg-yellow-100 text-yellow-800',
-                                        'processing' => 'bg-blue-100 text-blue-800',
-                                        'completed' => 'bg-green-100 text-green-800',
-                                        'cancelled' => 'bg-red-100 text-red-800',
-                                    ];
-                                    $class = $statusClasses[$order->status] ?? 'bg-gray-100 text-gray-800';
-                                @endphp
-                                <span class="px-3 py-1 text-xs font-bold rounded-full {{ $class }}">
-                                    {{ ucfirst($order->status) }}
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Preview Item (Ambil 1 item pertama sebagai preview) -->
-                        <div class="flex items-center gap-4">
-                            @php $firstItem = $order->items->first(); @endphp
-                            @if($firstItem && $firstItem->product)
-                                <img src="{{ asset('storage/' . $firstItem->product->image) }}" class="w-16 h-16 object-cover rounded bg-gray-100" alt="">
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">{{ $firstItem->product->nama }}</h4>
-                                    @if($order->items->count() > 1)
-                                        <p class="text-sm text-gray-500">+ {{ $order->items->count() - 1 }} produk lainnya</p>
-                                    @else
-                                        <p class="text-sm text-gray-500">x{{ $firstItem->quantity }}</p>
-                                    @endif
+                <div class="col-12">
+                    <div class="card shadow-sm border-0 mb-3">
+                        <div class="card-body p-4">
+                            <div class="row align-items-center border-bottom pb-3 mb-3">
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <small class="text-muted">No. Order</small>
+                                    <h6 class="fw-bold mb-0">#{{ $order->id }}</h6>
                                 </div>
-                            @else
-                                <div class="text-gray-500 italic">Produk telah dihapus</div>
-                            @endif
-                        </div>
-                        
-                        <div class="mt-4 text-right">
-                            <a href="{{ route('orders.show', $order->id) }}" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm">
-                                Lihat Detail Pesanan &rarr;
-                            </a>
+                                <div class="col-md-2 mb-2 mb-md-0">
+                                    <small class="text-muted">Tanggal</small>
+                                    <p class="mb-0 fw-medium">{{ $order->created_at->format('d M Y') }}</p>
+                                </div>
+                                <div class="col-md-3 mb-2 mb-md-0">
+                                    <small class="text-muted">Total Belanja</small>
+                                    <h6 class="mb-0 fw-bold" style="color: #558b8b;">Rp {{ number_format($order->total_price, 0, ',', '.') }}</h6>
+                                </div>
+                                <div class="col-md-4 text-md-end">
+                                    <small class="text-muted d-block mb-1">Status</small>
+                                    @php
+                                        $statusConfig = [
+                                            'pending' => ['badge' => 'bg-warning', 'text' => 'Menunggu Pembayaran'],
+                                            'processing' => ['badge' => 'bg-info', 'text' => 'Sedang Diproses'],
+                                            'completed' => ['badge' => 'bg-success', 'text' => 'Selesai'],
+                                            'cancelled' => ['badge' => 'bg-danger', 'text' => 'Dibatalkan'],
+                                        ];
+                                        $status = $statusConfig[$order->status] ?? ['badge' => 'bg-secondary', 'text' => ucfirst($order->status)];
+                                    @endphp
+                                    <span class="badge {{ $status['badge'] }} px-3 py-2">{{ $status['text'] }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Preview Item -->
+                            <div class="d-flex align-items-center gap-3">
+                                @php $firstItem = $order->items->first(); @endphp
+                                @if($firstItem && $firstItem->product)
+                                    <img src="{{ asset('storage/' . $firstItem->product->image) }}" 
+                                         class="rounded" 
+                                         style="width: 70px; height: 70px; object-fit: cover;"
+                                         alt="{{ $firstItem->product->nama }}">
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 fw-bold">{{ $firstItem->product->nama }}</h6>
+                                        @if($order->items->count() > 1)
+                                            <small class="text-muted">+ {{ $order->items->count() - 1 }} produk lainnya</small>
+                                        @else
+                                            <small class="text-muted">Jumlah: {{ $firstItem->quantity }}</small>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <a href="{{ route('orders.show', $order->id) }}" class="btn btn-outline-primary btn-sm">
+                                            <i class="bi bi-eye"></i> Detail
+                                        </a>
+                                    </div>
+                                @else
+                                    <div class="text-muted fst-italic">
+                                        <i class="bi bi-exclamation-circle"></i> Produk telah dihapus
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
             @empty
-                <div class="bg-white p-10 rounded-lg shadow text-center">
-                    <img src="https://via.placeholder.com/150?text=Empty" alt="Kosong" class="mx-auto h-24 w-24 opacity-50 mb-4">
-                    <h3 class="text-lg font-medium text-gray-900">Belum ada pesanan</h3>
-                    <p class="text-gray-500 mb-6">King belum pernah belanja nih. Yuk mulai belanja!</p>
-                    <a href="{{ route('products.index') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700">
-                        Mulai Belanja
-                    </a>
+                <div class="col-12">
+                    <div class="card shadow-sm border-0">
+                        <div class="card-body text-center py-5">
+                            <i class="bi bi-inbox fs-1 text-muted d-block mb-3"></i>
+                            <h5 class="fw-bold mb-2">Belum Ada Pesanan</h5>
+                            <p class="text-muted mb-4">Kamu belum pernah belanja nih. Yuk mulai belanja sekarang!</p>
+                            <a href="{{ route('produk.index') }}" class="btn btn-primary">
+                                <i class="bi bi-cart-plus"></i> Mulai Belanja
+                            </a>
+                        </div>
+                    </div>
                 </div>
             @endforelse
+            </div>
 
+            @if($orders->hasPages())
             <div class="mt-4">
                 {{ $orders->links() }}
             </div>
+            @endif
         </div>
     </div>
 </div>
