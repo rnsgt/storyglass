@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ChatbotController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CheckoutController;
@@ -42,6 +43,12 @@ Route::post('/checkout/proses', [CheckoutController::class, 'proses'])->name('ch
 Route::get('/checkout/qris/{order}', [CheckoutController::class, 'qris'])->name('checkout.qris');
 Route::get('/checkout/status/{order}', [CheckoutController::class, 'status'])->name('checkout.status');
 Route::get('/checkout/success', [CheckoutController::class, 'success'])->name('checkout.success');
+
+// Orders
+Route::middleware('auth')->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+});
 
 //Dasboard
 Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
