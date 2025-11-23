@@ -245,6 +245,11 @@
             color: white;
         }
 
+        .status-shipped {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
         .status-completed {
             background: linear-gradient(135deg, #3cb371 0%, #5fcc8b 100%);
             color: white;

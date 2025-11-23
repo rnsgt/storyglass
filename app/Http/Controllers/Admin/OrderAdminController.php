@@ -36,7 +36,7 @@ class OrderAdminController extends Controller
         $order = Order::findOrFail($id);
         
         $request->validate([
-            'status' => 'required|string|in:pending,processing,completed,cancelled',
+            'status' => 'required|string|in:pending,processing,shipped,completed,cancelled',
         ]);
 
         $order->update([

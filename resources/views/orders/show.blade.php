@@ -63,7 +63,8 @@
                         @php
                             $statusConfig = [
                                 'pending' => ['badge' => 'bg-warning', 'text' => 'Menunggu Pembayaran'],
-                                'processing' => ['badge' => 'bg-info', 'text' => 'Sedang Diproses'],
+                                'processing' => ['badge' => 'bg-info', 'text' => 'Sedang Dikemas'],
+                                'shipped' => ['badge' => 'bg-primary', 'text' => 'Dalam Perjalanan'],
                                 'completed' => ['badge' => 'bg-success', 'text' => 'Selesai'],
                                 'cancelled' => ['badge' => 'bg-danger', 'text' => 'Dibatalkan'],
                             ];
@@ -89,6 +90,14 @@
                     @if($order->status == 'pending')
                     <div class="alert alert-warning mt-3 mb-0">
                         <small><i class="bi bi-exclamation-triangle"></i> Silakan selesaikan pembayaran agar pesanan segera diproses.</small>
+                    </div>
+                    @elseif($order->status == 'processing')
+                    <div class="alert alert-info mt-3 mb-0">
+                        <small><i class="bi bi-box-seam"></i> Pesanan sedang dikemas oleh penjual.</small>
+                    </div>
+                    @elseif($order->status == 'shipped')
+                    <div class="alert alert-primary mt-3 mb-0">
+                        <small><i class="bi bi-truck"></i> Pesanan sedang dalam perjalanan ke alamat Anda!</small>
                     </div>
                     @elseif($order->status == 'completed')
                     <div class="alert alert-success mt-3 mb-0">

@@ -60,21 +60,67 @@ class CheckoutController extends Controller
             'email' => 'required|email',
             'telepon' => 'required|string|max:20',
             'alamat' => 'required|string',
+            'type' => 'nullable|string|in:single,cart',
+            'product_id' => 'nullable|exists:products,id',
         ]);
 
-        // Simpan order
-        $data = $this->normalizeCartForView();
-        $order = \App\Models\Order::create([
-            'user_id' => Auth::id(),
-            'nama' => $validated['nama'],
-            'email' => $validated['email'],
-            'telepon' => $validated['telepon'],
-            'alamat' => $validated['alamat'],
-            'total' => $data['total'],
-            'paid' => false,
-        ]);
+        // Cek apakah checkout single product atau dari cart
+        $isSingleProduct = $request->input('type') === 'single' && $request->filled('product_id');
+        
+        if ($isSingleProduct) {
+            // Checkout single product (Beli Langsung)
+            $product = Product::findOrFail($request->product_id);
+            $total = $product->harga;
+            
+            // Simpan order
+            $order = \App\Models\Order::create([
+                'user_id' => Auth::id(),
+                'nama' => $validated['nama'],
+                'email' => $validated['email'],
+                'telepon' => $validated['telepon'],
+                'alamat' => $validated['alamat'],
+                'total' => $total,
+                'paid' => false,
+            ]);
 
-        session()->forget('cart');
+            // Simpan order item
+            \App\Models\OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $product->id,
+                'nama' => $product->nama,
+                'harga' => $product->harga,
+                'quantity' => 1,
+                'subtotal' => $product->harga,
+            ]);
+        } else {
+            // Checkout dari cart
+            $data = $this->normalizeCartForView();
+            
+            // Simpan order
+            $order = \App\Models\Order::create([
+                'user_id' => Auth::id(),
+                'nama' => $validated['nama'],
+                'email' => $validated['email'],
+                'telepon' => $validated['telepon'],
+                'alamat' => $validated['alamat'],
+                'total' => $data['total'],
+                'paid' => false,
+            ]);
+
+            // Simpan order items
+            foreach ($data['cart'] as $item) {
+                \App\Models\OrderItem::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item['id'],
+                    'nama' => $item['nama'],
+                    'harga' => $item['harga'],
+                    'quantity' => $item['jumlah'],
+                    'subtotal' => $item['harga'] * $item['jumlah'],
+                ]);
+            }
+
+            session()->forget('cart');
+        }
 
         // redirect ke halaman pembayaran QRIS
         return redirect()->route('checkout.qris', ['order' => $order->id]);

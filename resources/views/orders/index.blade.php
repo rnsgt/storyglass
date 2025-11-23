@@ -34,7 +34,8 @@
                                     @php
                                         $statusConfig = [
                                             'pending' => ['badge' => 'bg-warning', 'text' => 'Menunggu Pembayaran'],
-                                            'processing' => ['badge' => 'bg-info', 'text' => 'Sedang Diproses'],
+                                            'processing' => ['badge' => 'bg-info', 'text' => 'Sedang Dikemas'],
+                                            'shipped' => ['badge' => 'bg-primary', 'text' => 'Dalam Perjalanan'],
                                             'completed' => ['badge' => 'bg-success', 'text' => 'Selesai'],
                                             'cancelled' => ['badge' => 'bg-danger', 'text' => 'Dibatalkan'],
                                         ];

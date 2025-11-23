@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\ProductAdminController;
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Admin Login
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [ProductAdminController::class, 'index'])->name('dashboard');
     Route::get('/products', [ProductAdminController::class, 'listProducts'])->name('products.list');
