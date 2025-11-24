@@ -288,7 +288,7 @@
             <i class="bi bi-graph-up"></i>
             <span>Laporan</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('admin.settings.index') }}" class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
             <i class="bi bi-gear"></i>
             <span>Pengaturan</span>
         </a>

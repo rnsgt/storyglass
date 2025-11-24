@@ -27,6 +27,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('orders', OrderAdminController::class)->only(['index', 'show', 'update']);
     Route::resource('customers', CustomerAdminController::class)->only(['index', 'show', 'destroy']);
     Route::get('reports', [ReportAdminController::class, 'index'])->name('reports.index');
+    Route::get('settings', [\App\Http\Controllers\Admin\SettingAdminController::class, 'index'])->name('settings.index');
+    Route::put('settings', [\App\Http\Controllers\Admin\SettingAdminController::class, 'update'])->name('settings.update');
 });
 
 // Produk 🛍️
