@@ -12,6 +12,7 @@ class Product extends Model
             'harga',
             'deskripsi',
             'gambar',
+            'stok',
         ];
         public function cartItems()
         {

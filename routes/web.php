@@ -12,7 +12,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CheckoutController;
 use Symfony\Component\HttpKernel\Profiler\Profile;
 use App\Http\Controllers\Admin\OrderAdminController;
+use App\Http\Controllers\Admin\ReportAdminController;
 use App\Http\Controllers\Admin\ProductAdminController;
+use App\Http\Controllers\Admin\CustomerAdminController;
 
 // 🏠 HOME
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -23,6 +25,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/products', [ProductAdminController::class, 'listProducts'])->name('products.list');
     Route::resource('products', ProductAdminController::class)->except(['show', 'index']);
     Route::resource('orders', OrderAdminController::class)->only(['index', 'show', 'update']);
+    Route::resource('customers', CustomerAdminController::class)->only(['index', 'show', 'destroy']);
+    Route::get('reports', [ReportAdminController::class, 'index'])->name('reports.index');
 });
 
 // Produk 🛍️

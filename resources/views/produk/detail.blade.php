@@ -29,8 +29,14 @@
               {{-- Detail Produk --}}
             <div class="col-md-7">
                 <h2 class="fw-bold mb-3">{{ $product->nama }}</h2>
-                <p class="text-success fs-5 fw-semibold mb-4">
+                <p class="text-success fs-5 fw-semibold mb-2">
                     Rp {{ number_format($product->harga, 0, ',', '.') }}
+                </p>
+                <p class="mb-3">
+                    <span class="badge {{ $product->stok > 10 ? 'bg-success' : ($product->stok > 0 ? 'bg-warning text-dark' : 'bg-danger') }} px-3 py-2">
+                        <i class="bi bi-box-seam me-1"></i> 
+                        Stok: {{ $product->stok > 0 ? $product->stok . ' unit tersedia' : 'Habis' }}
+                    </span>
                 </p>
                 <p class="text-muted">{{ $product->deskripsi ?? 'Belum ada deskripsi untuk produk ini.' }}</p>
 

@@ -280,11 +280,11 @@
             <i class="bi bi-bag-check"></i>
             <span>Pesanan</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('admin.customers.index') }}" class="nav-item {{ request()->routeIs('admin.customers.*') ? 'active' : '' }}">
             <i class="bi bi-people"></i>
             <span>Pelanggan</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('admin.reports.index') }}" class="nav-item {{ request()->routeIs('admin.reports.*') ? 'active' : '' }}">
             <i class="bi bi-graph-up"></i>
             <span>Laporan</span>
         </a>

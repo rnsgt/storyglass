@@ -26,6 +26,16 @@ class User extends Authenticatable
         'role',
     ];
 
+    /**
+     * Relasi ke orders user
+     * 
+     * @return HasMany
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
     // Helper untuk cek role (opsional tapi sangat berguna)
     public function isAdmin()
     {

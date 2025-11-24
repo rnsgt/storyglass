@@ -20,8 +20,13 @@
                         {{-- Isi Card --}}
                         <div class="card-body">
                             <h5 class="fw-bold">{{ $product->nama }}</h5>
-                            <p class="text-muted mb-3">
+                            <p class="text-muted mb-1">
                                 Rp{{ number_format($product->harga, 0, ',', '.') }}
+                            </p>
+                            <p class="mb-3">
+                                <span class="badge {{ $product->stok > 10 ? 'bg-success' : ($product->stok > 0 ? 'bg-warning' : 'bg-danger') }}">
+                                    <i class="bi bi-box-seam"></i> Stok: {{ $product->stok > 0 ? $product->stok : 'Habis' }}
+                                </span>
                             </p>
 
                             <div class="d-flex justify-content-center gap-2">
