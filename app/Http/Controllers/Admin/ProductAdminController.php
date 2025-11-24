@@ -53,9 +53,11 @@ class ProductAdminController extends Controller
         ]);
 
         // Upload Gambar jika ada
-        $imagePath = null;
+        $imageName = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('products', 'public');
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('image'), $imageName);
         }
 
         // Simpan ke Database
@@ -64,7 +66,7 @@ class ProductAdminController extends Controller
             'deskripsi' => $request->deskripsi,
             'harga' => $request->harga,
             'stok' => $request->stok,
-            'image' => $imagePath,
+            'gambar' => $imageName,
         ]);
 
         return redirect()->route('admin.products.list')->with('success', 'Produk berhasil ditambahkan, King!');
@@ -100,11 +102,14 @@ class ProductAdminController extends Controller
         // Cek jika ada upload gambar baru
         if ($request->hasFile('image')) {
             // Hapus gambar lama jika ada
-            if ($product->image && Storage::disk('public')->exists($product->image)) {
-                Storage::disk('public')->delete($product->image);
+            if ($product->gambar && file_exists(public_path('image/' . $product->gambar))) {
+                unlink(public_path('image/' . $product->gambar));
             }
             // Simpan gambar baru
-            $data['image'] = $request->file('image')->store('products', 'public');
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $image->move(public_path('image'), $imageName);
+            $data['gambar'] = $imageName;
         }
 
         $product->update($data);
@@ -120,8 +125,8 @@ class ProductAdminController extends Controller
         $product = Product::findOrFail($id);
 
         // Hapus gambar dari storage biar hemat
-        if ($product->image && Storage::disk('public')->exists($product->image)) {
-            Storage::disk('public')->delete($product->image);
+        if ($product->gambar && file_exists(public_path('image/' . $product->gambar))) {
+            unlink(public_path('image/' . $product->gambar));
         }
 
         $product->delete();
