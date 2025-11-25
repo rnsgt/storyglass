@@ -29,8 +29,10 @@
             @foreach($produkUnggulan as $produk)
                 <div class="col-md-3">
                     <div class="card border-0 shadow-sm rounded-4 h-100">
-                        <img src="{{ asset('image/' . $produk->gambar) }}" class="card-img-top rounded-top-4"
-                             alt="{{ $produk->nama }}" style="height: 220px; object-fit: cover;">
+                        <a href="{{ route('produk.detail', $produk->id) }}" class="text-decoration-none">
+                            <img src="{{ asset('image/' . $produk->gambar) }}" class="card-img-top rounded-top-4"
+                                 alt="{{ $produk->nama }}" style="height: 220px; object-fit: cover; cursor: pointer;">
+                        </a>
                         <div class="card-body text-center">
                             <h5 class="card-title fw-semibold">{{ $produk->nama }}</h5>
                             <p class="text-danger fw-bold mb-1">Rp {{ number_format($produk->harga, 0, ',', '.') }}</p>

@@ -26,7 +26,7 @@
                             <tr>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="{{ $item->product && $item->product->image ? asset('storage/' . $item->product->image) : 'https://via.placeholder.com/60' }}" 
+                                        <img src="{{ $item->product && $item->product->gambar ? asset('image/' . $item->product->gambar) : 'https://via.placeholder.com/60' }}" 
                                              alt="{{ $item->product->nama ?? 'Produk' }}" 
                                              style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" 
                                              class="me-3">

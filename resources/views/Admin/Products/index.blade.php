@@ -23,8 +23,8 @@
                     @forelse($products as $product)
                     <tr>
                         <td>
-                            @if($product->image)
-                                <img src="{{ asset('storage/'.$product->image) }}" alt="{{ $product->nama }}" 
+                            @if($product->gambar)
+                                <img src="{{ asset('image/'.$product->gambar) }}" alt="{{ $product->nama }}" 
                                      style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
                             @else
                                 <div style="width: 60px; height: 60px; background: #e9ecef; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
