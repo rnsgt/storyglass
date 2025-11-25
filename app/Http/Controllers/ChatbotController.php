@@ -11,20 +11,20 @@ class ChatbotController extends Controller
     {
         $message = strtolower($request->message); 
         $reply = "Saya adalah chatbot StoryGlass yang membantu merekomendasikan kacamata sesuai bentuk wajah kamu. 
-Cukup ketik salah satu bentuk wajah seperti: oval, bulat, persegi, hati, berlian, segitiga, atau panjang.";
+Cukup ketik salah satu bentuk wajah seperti: oval, bulat, persegi, hati, berlian, segitiga, panjang, atau lonjong.";
 ;
         $product = null;
 
         // Mapping bentuk wajah ke produk
         $mapping = [
-            'oval' => 'Kacamata Stylish',
-            'bulat' => 'Kacamata Retro',
-            'persegi' => 'Kacamata Modern',
-            'hati' => 'Kacamata Elegan',
-            'berlian' => 'Kacamata Modern',
+            'oval' => 'Kacamata Retro',
+            'bulat' => 'Kacamata Metal Square',
+            'persegi' => 'Kacamata Rectangular Vintage Metal',
+            'hati' => 'Kacamata Rimless Crystal Elegance',
+            'berlian' => 'Kacamata Metal Cat-Eye Premium',
             'segitiga' => 'Kacamata Retro',
-            'panjang' => 'Kacamata Modern',
-            'lonjong' => 'Kacamata Modern'
+            'panjang' => 'Kacamata Oversize Square Classic Black',
+            'lonjong' => 'Kacamata Oversize Square Classic Black'
         ];
 
         // Cari kata kunci di input user
