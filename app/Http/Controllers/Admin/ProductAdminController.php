@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductAdminController extends Controller
 {
@@ -57,17 +58,31 @@ class ProductAdminController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
-            $image->move(public_path('image'), $imageName);
+            
+            // Pastikan folder exist
+            $destinationPath = public_path('image');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            
+            $image->move($destinationPath, $imageName);
+            
+            // Log untuk debugging
+            Log::info('Gambar berhasil diupload: ' . $imageName);
+        } else {
+            Log::warning('Tidak ada file gambar yang diupload');
         }
 
         // Simpan ke Database
-        Product::create([
+        $product = Product::create([
             'nama' => $request->nama,
             'deskripsi' => $request->deskripsi,
             'harga' => $request->harga,
             'stok' => $request->stok,
             'gambar' => $imageName,
         ]);
+        
+        Log::info('Produk baru dibuat dengan ID: ' . $product->id . ', Gambar: ' . $imageName);
 
         return redirect()->route('admin.products.list')->with('success', 'Produk berhasil ditambahkan, King!');
     }

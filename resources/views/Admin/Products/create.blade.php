@@ -46,12 +46,30 @@
 
                     <div class="mb-3">
                         <label for="image" class="form-label">Foto Produk</label>
-                        <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*">
+                        <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" accept="image/*" onchange="previewImage(event)">
                         <div class="form-text">Format: JPG, PNG, JPEG (Max. 2MB)</div>
                         @error('image')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
+                        
+                        {{-- Preview Gambar --}}
+                        <div id="imagePreview" class="mt-3" style="display: none;">
+                            <img id="preview" src="" alt="Preview" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+                        </div>
                     </div>
+
+                    <script>
+                    function previewImage(event) {
+                        const reader = new FileReader();
+                        reader.onload = function(){
+                            const preview = document.getElementById('preview');
+                            const previewDiv = document.getElementById('imagePreview');
+                            preview.src = reader.result;
+                            previewDiv.style.display = 'block';
+                        }
+                        reader.readAsDataURL(event.target.files[0]);
+                    }
+                    </script>
 
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{{ route('admin.products.list') }}" class="btn btn-secondary">
