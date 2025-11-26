@@ -30,7 +30,7 @@
                 <div class="col-md-3">
                     <div class="card border-0 shadow-sm rounded-4 h-100">
                         <a href="{{ route('produk.detail', $produk->id) }}" class="text-decoration-none">
-                            <img src="{{ asset('image/' . $produk->gambar) }}" class="card-img-top rounded-top-4"
+                            <img src="{{ $produk->gambar }}" class="card-img-top rounded-top-4"
                                  alt="{{ $produk->nama }}" style="height: 220px; object-fit: cover; cursor: pointer;">
                         </a>
                         <div class="card-body text-center">

@@ -76,7 +76,7 @@
                             <tr>
                                 <td>
                                     @if($product->gambar)
-                                        <img src="{{ asset('image/'.$product->gambar) }}" alt="{{ $product->nama }}" 
+                                        <img src="{{ $product->gambar }}" alt="{{ $product->nama }}" 
                                              style="width: 50px; height: 50px; object-fit: cover; border-radius: 5px;">
                                     @else
                                         <div style="width: 50px; height: 50px; background: #ddd; border-radius: 5px;"></div>
