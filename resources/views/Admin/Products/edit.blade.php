@@ -51,7 +51,7 @@
                         @if($product->gambar)
                             <div class="mb-2">
                                 <small class="text-muted d-block mb-2">Gambar saat ini:</small>
-                                <img src="{{ $product->gambar }}" alt="Current Image" 
+                                <img src="{{ asset('image/'.$product->gambar) }}" alt="Current Image" 
                                      style="width: 120px; height: 120px; object-fit: cover; border-radius: 8px; border: 2px solid #dee2e6;">
                             </div>
                         @endif

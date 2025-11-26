@@ -20,7 +20,7 @@
         <div class="row align-items-center g-4">
             {{-- Gambar Produk --}}
             <div class="col-md-5 text-center">
-                <img src="{{ $product->gambar }}" 
+                <img src="{{ asset('image/'.$product->gambar) }}" 
                      alt="{{ $product->nama }}" 
                      class="img-fluid rounded-4 shadow-sm" 
                      style="max-height: 350px; object-fit: cover;">
