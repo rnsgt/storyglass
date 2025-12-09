@@ -49,7 +49,7 @@
                             <div class="d-flex align-items-center gap-3">
                                 @php $firstItem = $order->items->first(); @endphp
                                 @if($firstItem && $firstItem->product)
-                                    <img src="{{ asset('storage/' . $firstItem->product->image) }}" 
+                                    <img src="{{ asset('image/' . $firstItem->product->gambar) }}" 
                                          class="rounded" 
                                          style="width: 70px; height: 70px; object-fit: cover;"
                                          alt="{{ $firstItem->product->nama }}">

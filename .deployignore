@@ -1,0 +1,62 @@
+# File dan Folder yang TIDAK PERLU diupload ke server
+
+# Dependencies
+node_modules/
+vendor/
+
+# Environment files
+.env
+.env.backup
+.env.local
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+tests/
+.phpunit.result.cache
+phpunit.xml
+
+# Storage (akan di-generate di server)
+storage/app/*
+!storage/app/.gitignore
+!storage/app/public/
+storage/framework/cache/*
+!storage/framework/cache/.gitignore
+storage/framework/sessions/*
+!storage/framework/sessions/.gitignore
+storage/framework/views/*
+!storage/framework/views/.gitignore
+storage/logs/*
+!storage/logs/.gitignore
+
+# Build (akan di-generate di server jika perlu)
+# Uncomment jika tidak ingin upload hasil build
+# public/build/
+# public/hot
+
+# Documentation (optional)
+README.md
+SETUP-CLOUDINARY-TIM.md
+SOLUSI-CLOUD-STORAGE.md
+WORKFLOW-GAMBAR.md
+
+# Laravel Mix (jika tidak dipakai)
+webpack.mix.js
+
+# NPM
+package-lock.json
+yarn.lock

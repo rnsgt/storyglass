@@ -22,7 +22,7 @@
                         <div class="list-group-item px-0 py-3">
                             <div class="row align-items-center">
                                 <div class="col-auto">
-                                    <img src="{{ $item->product && $item->product->image ? asset('storage/' . $item->product->image) : 'https://via.placeholder.com/80' }}" 
+                                    <img src="{{ $item->product && $item->product->gambar ? asset('image/' . $item->product->gambar) : 'https://via.placeholder.com/80' }}" 
                                          class="rounded" 
                                          style="width: 80px; height: 80px; object-fit: cover;"
                                          alt="{{ $item->product->nama ?? 'Produk' }}">
