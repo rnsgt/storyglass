@@ -39,14 +39,16 @@ class CheckoutController extends Controller
     public function index()
     {
         $data = $this->normalizeCartForView();
-        return view('checkout.checkout', array_merge($data, ['product' => null]));
+        $addresses = Auth::check() ? Auth::user()->addresses : collect();
+        return view('checkout.checkout', array_merge($data, ['product' => null, 'addresses' => $addresses]));
     }
 
     public function beli($id)
     {
         $product = Product::findOrFail($id);
         $data = $this->normalizeCartForView();
-        return view('checkout.checkout', array_merge($data, ['product' => $product]));
+        $addresses = Auth::check() ? Auth::user()->addresses : collect();
+        return view('checkout.checkout', array_merge($data, ['product' => $product, 'addresses' => $addresses]));
     }
 
     public function proses(Request $request)
@@ -59,10 +61,30 @@ class CheckoutController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|email',
             'telepon' => 'required|string|max:20',
-            'alamat' => 'required|string',
+            'alamat' => 'required_if:address_type,new|nullable|string',
+            'payment_method' => 'required|in:qris,cod',
             'type' => 'nullable|string|in:single,cart',
             'product_id' => 'nullable|exists:products,id',
+            'address_type' => 'nullable|in:saved,new',
+            'saved_address_id' => 'required_if:address_type,saved|nullable|exists:user_addresses,id',
         ]);
+
+        // Ambil alamat (dari saved atau new)
+        $alamat = '';
+        if ($request->address_type === 'saved' && $request->saved_address_id) {
+            $savedAddress = \App\Models\UserAddress::find($request->saved_address_id);
+            if ($savedAddress) {
+                $alamat = $savedAddress->full_address;
+            }
+        } else {
+            // Gunakan alamat baru yang diinput
+            $alamat = $request->alamat;
+        }
+        
+        // Validasi alamat tidak boleh kosong
+        if (empty($alamat)) {
+            return back()->withErrors(['alamat' => 'Alamat pengiriman harus diisi'])->withInput();
+        }
 
         // Cek apakah checkout single product atau dari cart
         $isSingleProduct = $request->input('type') === 'single' && $request->filled('product_id');
@@ -78,8 +100,9 @@ class CheckoutController extends Controller
                 'nama' => $validated['nama'],
                 'email' => $validated['email'],
                 'telepon' => $validated['telepon'],
-                'alamat' => $validated['alamat'],
+                'alamat' => $alamat,
                 'total' => $total,
+                'payment_method' => $validated['payment_method'],
                 'paid' => false,
             ]);
 
@@ -107,8 +130,9 @@ class CheckoutController extends Controller
                 'nama' => $validated['nama'],
                 'email' => $validated['email'],
                 'telepon' => $validated['telepon'],
-                'alamat' => $validated['alamat'],
+                'alamat' => $alamat,
                 'total' => $data['total'],
+                'payment_method' => $validated['payment_method'],
                 'paid' => false,
             ]);
 
@@ -133,8 +157,13 @@ class CheckoutController extends Controller
             session()->forget('cart');
         }
 
-        // redirect ke halaman pembayaran QRIS
-        return redirect()->route('checkout.qris', ['order' => $order->id]);
+        // Redirect berdasarkan metode pembayaran
+        if ($validated['payment_method'] === 'qris') {
+            return redirect()->route('checkout.qris', ['order' => $order->id]);
+        } else {
+            // COD langsung ke success page
+            return redirect()->route('checkout.success')->with('success', 'Pesanan berhasil! Silakan siapkan uang tunai saat barang tiba.');
+        }
     }
     public function qris($orderId)
     {

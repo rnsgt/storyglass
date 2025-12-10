@@ -5,7 +5,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable = ['user_id','nama','email','telepon','alamat','total','status'];
+    protected $fillable = [
+        'user_id',
+        'nama',
+        'email',
+        'telepon',
+        'alamat',
+        'total',
+        'status',
+        'payment_method',
+        'courier_name',
+        'tracking_number',
+        'shipped_at'
+    ];
+    
+    protected $casts = [
+        'shipped_at' => 'datetime',
+    ];
     
     // Relasi
     public function items() { return $this->hasMany(OrderItem::class); }

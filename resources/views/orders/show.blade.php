@@ -44,12 +44,64 @@
             </div>
 
             <!-- Info Pengiriman -->
-            <div class="card shadow-sm border-0">
+            <div class="card shadow-sm border-0 mb-4">
                 <div class="card-body">
                     <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt"></i> Alamat Pengiriman</h5>
                     <p class="mb-0" style="white-space: pre-line;">{{ $order->shipping_address }}</p>
                 </div>
             </div>
+
+            @if($order->status == 'shipped' || $order->status == 'completed')
+            <!-- Info Tracking Pengiriman -->
+            <div class="card shadow-sm border-0" style="border-left: 4px solid #558b8b !important;">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4" style="color: #558b8b;">
+                        <i class="bi bi-truck"></i> Informasi Pengiriman
+                    </h5>
+                    
+                    @if($order->courier_name && $order->tracking_number)
+                    <div class="row mb-3">
+                        <div class="col-12 mb-3">
+                            <div class="p-3 rounded" style="background-color: #f0f8f8; border: 1px solid #c4e2e0;">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-building text-muted me-2"></i>
+                                    <small class="text-muted">Kurir Pengiriman</small>
+                                </div>
+                                <h6 class="fw-bold mb-0">{{ strtoupper($order->courier_name) }}</h6>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="p-3 rounded" style="background-color: #f0f8f8; border: 1px solid #c4e2e0;">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-receipt text-muted me-2"></i>
+                                    <small class="text-muted">Nomor Resi</small>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h6 class="fw-bold mb-0 font-monospace">{{ $order->tracking_number }}</h6>
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="copyResi('{{ $order->tracking_number }}')">
+                                        <i class="bi bi-clipboard"></i> Salin
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if($order->shipped_at)
+                    <div class="alert alert-info mb-0">
+                        <small>
+                            <i class="bi bi-clock"></i> Dikirim pada: 
+                            <strong>{{ $order->shipped_at->format('d M Y, H:i') }} WIB</strong>
+                        </small>
+                    </div>
+                    @endif
+                    @else
+                    <div class="alert alert-warning mb-0">
+                        <small><i class="bi bi-exclamation-circle"></i> Informasi resi belum tersedia. Silakan tunggu admin memperbarui status pengiriman.</small>
+                    </div>
+                    @endif
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- Kolom Ringkasan -->
@@ -76,6 +128,17 @@
                     <div class="d-flex justify-content-between mb-3">
                         <span class="text-muted">Tanggal Order</span>
                         <span class="fw-bold">{{ $order->created_at->format('d M Y') }}</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-muted">Metode Pembayaran</span>
+                        @if($order->payment_method === 'qris')
+                            <span class="badge bg-primary"><i class="bi bi-qr-code"></i> QRIS</span>
+                        @elseif($order->payment_method === 'cod')
+                            <span class="badge bg-success"><i class="bi bi-cash-coin"></i> COD</span>
+                        @else
+                            <span class="badge bg-secondary">{{ strtoupper($order->payment_method ?? 'N/A') }}</span>
+                        @endif
                     </div>
 
                     <hr>
@@ -109,4 +172,25 @@
         </div>
     </div>
 </div>
+
+<script>
+function copyResi(resi) {
+    navigator.clipboard.writeText(resi).then(function() {
+        // Berhasil menyalin
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check"></i> Tersalin';
+        btn.classList.remove('btn-outline-secondary');
+        btn.classList.add('btn-success');
+        
+        setTimeout(function() {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-outline-secondary');
+        }, 2000);
+    }, function(err) {
+        alert('Gagal menyalin nomor resi');
+    });
+}
+</script>
 @endsection

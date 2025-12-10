@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 
 class SettingAdminController extends Controller
 {
@@ -15,7 +16,7 @@ class SettingAdminController extends Controller
         // Debug: pastikan data ada
         if ($settings->isEmpty()) {
             // Jika kosong, coba run seeder
-            \Artisan::call('db:seed', ['--class' => 'SettingSeeder']);
+            Artisan::call('db:seed', ['--class' => 'SettingSeeder']);
             $settings = Setting::orderBy('key')->get()->groupBy('type');
         }
         

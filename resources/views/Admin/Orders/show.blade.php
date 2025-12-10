@@ -79,6 +79,19 @@
                     <small class="text-muted">Tanggal Order</small>
                     <p class="mb-0">{{ $order->created_at->format('d M Y H:i') }}</p>
                 </div>
+                
+                <div class="mb-3">
+                    <small class="text-muted">Metode Pembayaran</small>
+                    <p class="mb-0">
+                        @if($order->payment_method === 'qris')
+                            <span class="badge bg-primary"><i class="bi bi-qr-code"></i> QRIS</span>
+                        @elseif($order->payment_method === 'cod')
+                            <span class="badge bg-success"><i class="bi bi-cash-coin"></i> COD (Bayar di Tempat)</span>
+                        @else
+                            <span class="badge bg-secondary">{{ strtoupper($order->payment_method ?? 'N/A') }}</span>
+                        @endif
+                    </p>
+                </div>
 
                 <div>
                     <small class="text-muted">Status Saat Ini</small>
@@ -97,7 +110,7 @@
             <!-- Form Ganti Status -->
             <div class="table-container" style="border-top: 4px solid #558b8b;">
                 <h5 class="mb-4"><i class="bi bi-pencil-square"></i> Update Status</h5>
-                <form action="{{ route('admin.orders.update', $order->id) }}" method="POST">
+                <form action="{{ route('admin.orders.update', $order->id) }}" method="POST" id="orderForm">
                     @csrf
                     @method('PUT')
                     
@@ -112,11 +125,86 @@
                         </select>
                     </div>
 
+                    <!-- Form Pengiriman (Muncul saat pilih Shipped) -->
+                    <div id="shippingFields" style="display: none;">
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Lengkapi info pengiriman sebelum mengirim pesanan</strong>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="courier_name" class="form-label">
+                                <i class="bi bi-truck"></i> Nama Kurir/Ekspedisi <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   name="courier_name" 
+                                   id="courier_name" 
+                                   class="form-control @error('courier_name') is-invalid @enderror" 
+                                   placeholder="Contoh: JNE, SiCepat, J&T"
+                                   value="{{ old('courier_name', $order->courier_name) }}">
+                            @error('courier_name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="tracking_number" class="form-label">
+                                <i class="bi bi-upc-scan"></i> Nomor Resi <span class="text-danger">*</span>
+                            </label>
+                            <input type="text" 
+                                   name="tracking_number" 
+                                   id="tracking_number" 
+                                   class="form-control @error('tracking_number') is-invalid @enderror" 
+                                   placeholder="Contoh: JP1234567890"
+                                   value="{{ old('tracking_number', $order->tracking_number) }}">
+                            @error('tracking_number')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Info Pengiriman (Jika sudah shipped) -->
+                    @if($order->status == 'shipped' && $order->tracking_number)
+                    <div class="alert alert-success mb-3">
+                        <strong><i class="bi bi-check-circle"></i> Pesanan Sudah Dikirim</strong><br>
+                        <small>Kurir: <strong>{{ $order->courier_name }}</strong></small><br>
+                        <small>Resi: <strong>{{ $order->tracking_number }}</strong></small><br>
+                        <small>Dikirim: <strong>{{ $order->shipped_at ? $order->shipped_at->format('d M Y H:i') : '-' }}</strong></small>
+                    </div>
+                    @endif
+
                     <button type="submit" class="btn btn-primary w-100">
                         <i class="bi bi-check-circle"></i> Simpan Perubahan
                     </button>
                 </form>
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const statusSelect = document.getElementById('status');
+                    const shippingFields = document.getElementById('shippingFields');
+                    const courierInput = document.getElementById('courier_name');
+                    const trackingInput = document.getElementById('tracking_number');
+
+                    function toggleShippingFields() {
+                        if (statusSelect.value === 'shipped') {
+                            shippingFields.style.display = 'block';
+                            courierInput.required = true;
+                            trackingInput.required = true;
+                        } else {
+                            shippingFields.style.display = 'none';
+                            courierInput.required = false;
+                            trackingInput.required = false;
+                        }
+                    }
+
+                    // Check on load
+                    toggleShippingFields();
+
+                    // Check on change
+                    statusSelect.addEventListener('change', toggleShippingFields);
+                });
+            </script>
         </div>
     </div>
 </div>

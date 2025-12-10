@@ -75,12 +75,71 @@
                                     @enderror
                                 </div>
 
+                                <!-- Pilih Alamat -->
                                 <div class="mb-3">
-                                    <label for="alamat" class="form-label">Alamat Lengkap</label>
-                                    <textarea name="alamat" id="alamat" rows="3" class="form-control rounded-4 @error('alamat') is-invalid @enderror" 
-                                              placeholder="Jalan, No rumah, Kota, Provinsi, Kode Pos" required></textarea>
-                                    @error('alamat')
+                                    <label class="form-label">Alamat Pengiriman</label>
+                                    @if(isset($addresses) && $addresses->count() > 0)
+                                    <div class="mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="address_type" id="use_saved" value="saved" checked>
+                                            <label class="form-check-label" for="use_saved">
+                                                Gunakan Alamat Tersimpan
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="address_type" id="use_new" value="new">
+                                            <label class="form-check-label" for="use_new">
+                                                Alamat Baru
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <select name="saved_address_id" id="saved_address" class="form-select rounded-4 mb-2 @error('saved_address_id') is-invalid @enderror">
+                                        <option value="">Pilih alamat...</option>
+                                        @foreach($addresses as $addr)
+                                        <option value="{{ $addr->id }}" {{ $addr->is_default ? 'selected' : '' }}>
+                                            {{ $addr->label }} - {{ $addr->nama_penerima }} ({{ $addr->telepon }})
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @error('saved_address_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    @else
+                                    <input type="hidden" name="address_type" value="new">
+                                    @endif
+                                    
+                                    <textarea name="alamat" id="alamat" rows="3" class="form-control rounded-4 @error('alamat') is-invalid @enderror" 
+                                              placeholder="Jalan, No rumah, Kota, Provinsi, Kode Pos"></textarea>
+                                    <small class="text-muted">Isi jika memilih "Alamat Baru" atau belum ada alamat tersimpan</small>
+                                    @error('alamat')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Metode Pembayaran -->
+                                <div class="mb-3">
+                                    <label class="form-label">Metode Pembayaran</label>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <input type="radio" class="btn-check" name="payment_method" id="payment_qris" value="qris" checked>
+                                            <label class="btn btn-outline-primary w-100 rounded-4 py-3" for="payment_qris">
+                                                <i class="bi bi-qr-code fs-4 d-block mb-2"></i>
+                                                <strong>QRIS</strong>
+                                                <small class="d-block text-muted">Scan & Bayar</small>
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="radio" class="btn-check" name="payment_method" id="payment_cod" value="cod">
+                                            <label class="btn btn-outline-success w-100 rounded-4 py-3" for="payment_cod">
+                                                <i class="bi bi-cash-coin fs-4 d-block mb-2"></i>
+                                                <strong>COD</strong>
+                                                <small class="d-block text-muted">Bayar di Tempat</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @error('payment_method')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -213,12 +272,71 @@
                                     @enderror
                                 </div>
 
+                                <!-- Pilih Alamat -->
                                 <div class="mb-3">
-                                    <label for="alamat" class="form-label">Alamat Lengkap</label>
-                                    <textarea name="alamat" id="alamat" rows="3" class="form-control rounded-4 @error('alamat') is-invalid @enderror" 
-                                              placeholder="Jalan, No rumah, Kota, Provinsi, Kode Pos" required>{{ old('alamat') }}</textarea>
-                                    @error('alamat')
+                                    <label class="form-label">Alamat Pengiriman</label>
+                                    @if(isset($addresses) && $addresses->count() > 0)
+                                    <div class="mb-2">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="address_type" id="use_saved_cart" value="saved" checked>
+                                            <label class="form-check-label" for="use_saved_cart">
+                                                Gunakan Alamat Tersimpan
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="address_type" id="use_new_cart" value="new">
+                                            <label class="form-check-label" for="use_new_cart">
+                                                Alamat Baru
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <select name="saved_address_id" id="saved_address_cart" class="form-select rounded-4 mb-2 @error('saved_address_id') is-invalid @enderror">
+                                        <option value="">Pilih alamat...</option>
+                                        @foreach($addresses as $addr)
+                                        <option value="{{ $addr->id }}" data-address="{{ $addr->full_address }}" {{ $addr->is_default ? 'selected' : '' }}>
+                                            {{ $addr->label }} - {{ $addr->nama_penerima }} ({{ $addr->telepon }})
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    @error('saved_address_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    @else
+                                    <input type="hidden" name="address_type" value="new">
+                                    @endif
+                                    
+                                    <textarea name="alamat" id="alamat_cart" rows="3" class="form-control rounded-4 @error('alamat') is-invalid @enderror" 
+                                              placeholder="Jalan, No rumah, Kota, Provinsi, Kode Pos">{{ old('alamat') }}</textarea>
+                                    <small class="text-muted">Isi jika memilih "Alamat Baru" atau belum ada alamat tersimpan</small>
+                                    @error('alamat')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <!-- Metode Pembayaran -->
+                                <div class="mb-3">
+                                    <label class="form-label">Metode Pembayaran</label>
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <input type="radio" class="btn-check" name="payment_method" id="payment_qris_cart" value="qris" checked>
+                                            <label class="btn btn-outline-primary w-100 rounded-4 py-3" for="payment_qris_cart">
+                                                <i class="bi bi-qr-code fs-4 d-block mb-2"></i>
+                                                <strong>QRIS</strong>
+                                                <small class="d-block text-muted">Scan & Bayar</small>
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <input type="radio" class="btn-check" name="payment_method" id="payment_cod_cart" value="cod">
+                                            <label class="btn btn-outline-success w-100 rounded-4 py-3" for="payment_cod_cart">
+                                                <i class="bi bi-cash-coin fs-4 d-block mb-2"></i>
+                                                <strong>COD</strong>
+                                                <small class="d-block text-muted">Bayar di Tempat</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @error('payment_method')
+                                        <div class="text-danger small mt-1">{{ $message }}</div>
                                     @enderror
                                 </div>
 
@@ -295,6 +413,60 @@
         
         jumlahInput.addEventListener('change', updatePrice);
         jumlahInput.addEventListener('keyup', updatePrice);
+    }
+
+    // Toggle alamat (single product)
+    const useSaved = document.getElementById('use_saved');
+    const useNew = document.getElementById('use_new');
+    const savedAddress = document.getElementById('saved_address');
+    const alamatInput = document.getElementById('alamat');
+    
+    if (useSaved && useNew && savedAddress && alamatInput) {
+        function toggleAddress() {
+            if (useSaved.checked) {
+                savedAddress.style.display = 'block';
+                savedAddress.required = true;
+                alamatInput.style.display = 'none';
+                alamatInput.required = false;
+                alamatInput.value = '';
+            } else {
+                savedAddress.style.display = 'none';
+                savedAddress.required = false;
+                alamatInput.style.display = 'block';
+                alamatInput.required = true;
+            }
+        }
+        
+        useSaved.addEventListener('change', toggleAddress);
+        useNew.addEventListener('change', toggleAddress);
+        toggleAddress();
+    }
+
+    // Toggle alamat (cart)
+    const useSavedCart = document.getElementById('use_saved_cart');
+    const useNewCart = document.getElementById('use_new_cart');
+    const savedAddressCart = document.getElementById('saved_address_cart');
+    const alamatCartInput = document.getElementById('alamat_cart');
+    
+    if (useSavedCart && useNewCart && savedAddressCart && alamatCartInput) {
+        function toggleAddressCart() {
+            if (useSavedCart.checked) {
+                savedAddressCart.style.display = 'block';
+                savedAddressCart.required = true;
+                alamatCartInput.style.display = 'none';
+                alamatCartInput.required = false;
+                alamatCartInput.value = '';
+            } else {
+                savedAddressCart.style.display = 'none';
+                savedAddressCart.required = false;
+                alamatCartInput.style.display = 'block';
+                alamatCartInput.required = true;
+            }
+        }
+        
+        useSavedCart.addEventListener('change', toggleAddressCart);
+        useNewCart.addEventListener('change', toggleAddressCart);
+        toggleAddressCart();
     }
 </script>
 @endsection

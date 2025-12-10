@@ -37,12 +37,23 @@ class OrderAdminController extends Controller
         
         $request->validate([
             'status' => 'required|string|in:pending,processing,shipped,completed,cancelled',
+            'courier_name' => 'required_if:status,shipped|nullable|string|max:255',
+            'tracking_number' => 'required_if:status,shipped|nullable|string|max:255',
         ]);
 
-        $order->update([
+        $updateData = [
             'status' => $request->status,
-        ]);
+        ];
 
-        return redirect()->route('admin.orders.show', $id)->with('success', 'Status pesanan berhasil diperbarui, King!');
+        // Jika status shipped, tambahkan courier dan tracking number
+        if ($request->status === 'shipped') {
+            $updateData['courier_name'] = $request->courier_name;
+            $updateData['tracking_number'] = $request->tracking_number;
+            $updateData['shipped_at'] = now();
+        }
+
+        $order->update($updateData);
+
+        return redirect()->route('admin.orders.show', $id)->with('success', 'Status pesanan berhasil diperbarui!');
     }
 }
