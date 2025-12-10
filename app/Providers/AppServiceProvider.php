@@ -6,6 +6,7 @@ use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,6 +17,9 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        // Gunakan Bootstrap untuk pagination
+        Paginator::useBootstrapFive();
+        
         View::composer('layouts.main', function ($view) {
             // hitung dari session (guest)
             $sessionCart = session()->get('cart', []);

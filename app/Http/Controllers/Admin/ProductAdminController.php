@@ -18,8 +18,20 @@ class ProductAdminController extends Controller
         // Ambil data produk terbaru, 10 per halaman
         $products = Product::latest()->paginate(10);
 
+        // Statistik dashboard
+        $totalProducts = Product::count();
+        $todayOrders = \App\Models\Order::whereDate('created_at', today())->count();
+        $totalRevenue = \App\Models\Order::where('status', 'completed')->sum('total');
+        $totalCustomers = \App\Models\User::where('role', 'pembeli')->count();
+
         // Tampilkan ke view dashboard admin
-        return view('admin.dashboard', compact('products'));
+        return view('admin.dashboard', compact(
+            'products', 
+            'totalProducts', 
+            'todayOrders', 
+            'totalRevenue', 
+            'totalCustomers'
+        ));
     }
 
     /**

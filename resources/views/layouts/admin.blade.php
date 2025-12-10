@@ -258,10 +258,11 @@
             <i class="bi bi-graph-up"></i>
             <span>Laporan</span>
         </a>
-        <a href="#" class="nav-item">
+        <a href="{{ route('admin.settings.index') }}" class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
             <i class="bi bi-gear"></i>
             <span>Pengaturan</span>
         </a>
+
         <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
         <a href="{{ route('home') }}" class="nav-item">
             <i class="bi bi-globe"></i>
@@ -281,8 +282,8 @@
                     <span>{{ Auth::user()->name }}</span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-person"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="#"><i class="bi bi-gear"></i> Pengaturan</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.profile.index') }}"><i class="bi bi-person"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.settings.index') }}"><i class="bi bi-gear"></i> Pengaturan</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li>
                         <form method="POST" action="{{ route('logout') }}">

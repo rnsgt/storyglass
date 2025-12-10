@@ -13,6 +13,7 @@
                 </h5>
             </div>
             <div class="card-body">
+                @if(isset($settings['text']) && $settings['text']->count() > 0)
                 <div class="row g-3">
                     @foreach($settings['text'] ?? [] as $setting)
                         @if(in_array($setting->key, ['shop_name', 'shop_tagline', 'shop_address', 'shop_phone', 'shop_email', 'shop_whatsapp', 'shop_description']))
@@ -37,6 +38,12 @@
                         @endif
                     @endforeach
                 </div>
+                @else
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Data pengaturan belum tersedia. Silakan hubungi administrator.
+                </div>
+                @endif
             </div>
         </div>
 
@@ -48,6 +55,7 @@
                 </h5>
             </div>
             <div class="card-body">
+                @if(isset($settings['text']) && $settings['text']->count() > 0)
                 <div class="row g-3">
                     @foreach($settings['text'] ?? [] as $setting)
                         @if(in_array($setting->key, ['min_order', 'shipping_cost']))
@@ -71,25 +79,38 @@
                         @endif
                     @endforeach
                 </div>
+                @else
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Data pengaturan belum tersedia.
+                </div>
+                @endif
             </div>
         </div>
 
-        <!-- Mode Maintenance -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header py-3" style="background: linear-gradient(135deg, #558b8b 0%, #84a9ac 100%); border: none;">
-                <h5 class="mb-0 text-white">
-                    <i class="bi bi-gear me-2"></i>Pengaturan Sistem
-                </h5>
-            </div>
             <div class="card-body">
-                @foreach($settings['boolean'] ?? [] as $setting)
-                    @if($setting->key === 'maintenance_mode')
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" name="settings[{{ $setting->key }}]" 
-                               value="1" id="maintenance" {{ $setting->value == '1' ? 'checked' : '' }}>
-                        <label class="form-check-label" for="maintenance">
-                            <strong>Mode Maintenance</strong>
-                            <small class="d-block text-muted">
+                @if(isset($settings['boolean']) && $settings['boolean']->count() > 0)
+                    @foreach($settings['boolean'] ?? [] as $setting)
+                        @if($setting->key === 'maintenance_mode')
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" name="settings[{{ $setting->key }}]" 
+                                   value="1" id="maintenance" {{ $setting->value == '1' ? 'checked' : '' }}>
+                            <label class="form-check-label" for="maintenance">
+                                <strong>Mode Maintenance</strong>
+                                <small class="d-block text-muted">
+                                    Aktifkan untuk menonaktifkan akses pelanggan sementara
+                                </small>
+                            </label>
+                        </div>
+                        @endif
+                    @endforeach
+                @else
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Pengaturan sistem belum tersedia.
+                    </div>
+                @endif
+            </div>          <small class="d-block text-muted">
                                 Aktifkan untuk menonaktifkan akses pelanggan sementara
                             </small>
                         </label>

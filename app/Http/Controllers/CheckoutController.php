@@ -92,6 +92,11 @@ class CheckoutController extends Controller
                 'quantity' => 1,
                 'subtotal' => $product->harga,
             ]);
+
+            // Kurangi stok produk
+            if ($product->stok > 0) {
+                $product->decrement('stok', 1);
+            }
         } else {
             // Checkout dari cart
             $data = $this->normalizeCartForView();
@@ -107,7 +112,7 @@ class CheckoutController extends Controller
                 'paid' => false,
             ]);
 
-            // Simpan order items
+            // Simpan order items dan kurangi stok
             foreach ($data['cart'] as $item) {
                 \App\Models\OrderItem::create([
                     'order_id' => $order->id,
@@ -117,6 +122,12 @@ class CheckoutController extends Controller
                     'quantity' => $item['jumlah'],
                     'subtotal' => $item['harga'] * $item['jumlah'],
                 ]);
+
+                // Kurangi stok produk
+                $product = Product::find($item['id']);
+                if ($product && $product->stok >= $item['jumlah']) {
+                    $product->decrement('stok', $item['jumlah']);
+                }
             }
 
             session()->forget('cart');

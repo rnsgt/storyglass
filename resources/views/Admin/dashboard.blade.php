@@ -7,7 +7,7 @@
                 <div class="icon">
                     <i class="bi bi-box-seam"></i>
                 </div>
-                <h3 class="mb-1">{{ $products->total() }}</h3>
+                <h3 class="mb-1">{{ $totalProducts ?? 0 }}</h3>
                 <p class="text-muted mb-0">Total Produk</p>
             </div>
         </div>
@@ -18,7 +18,7 @@
                 <div class="icon">
                     <i class="bi bi-bag-check"></i>
                 </div>
-                <h3 class="mb-1">0</h3>
+                <h3 class="mb-1">{{ $todayOrders ?? 0 }}</h3>
                 <p class="text-muted mb-0">Pesanan Hari Ini</p>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 <div class="icon">
                     <i class="bi bi-currency-dollar"></i>
                 </div>
-                <h3 class="mb-1">Rp 0</h3>
+                <h3 class="mb-1">Rp {{ number_format($totalRevenue ?? 0, 0, ',', '.') }}</h3>
                 <p class="text-muted mb-0">Total Pendapatan</p>
             </div>
         </div>
@@ -40,7 +40,7 @@
                 <div class="icon">
                     <i class="bi bi-people"></i>
                 </div>
-                <h3 class="mb-1">0</h3>
+                <h3 class="mb-1">{{ $totalCustomers ?? 0 }}</h3>
                 <p class="text-muted mb-0">Total Pelanggan</p>
             </div>
         </div>
