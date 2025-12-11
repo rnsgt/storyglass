@@ -2,9 +2,18 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 mb-4">
-            <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Kembali
-            </a>
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="{{ route('admin.orders.index') }}" class="btn btn-outline-secondary btn-sm">
+                    <i class="bi bi-arrow-left"></i> Kembali
+                </a>
+                <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pesanan #{{ $order->id }}? Data tidak dapat dikembalikan!')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash"></i> Hapus Pesanan
+                    </button>
+                </form>
+            </div>
         </div>
 
         <!-- Kolom Kiri: Detail Item -->

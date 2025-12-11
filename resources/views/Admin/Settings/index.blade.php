@@ -1,6 +1,26 @@
 <x-admin-layout title="Pengaturan Toko" page-title="Pengaturan Toko">
 <div class="container-fluid">
 
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    @if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> 
+        <strong>Terjadi kesalahan:</strong>
+        <ul class="mb-0 mt-2">
+            @foreach($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <form action="{{ route('admin.settings.update') }}" method="POST">
         @csrf
         @method('PUT')
@@ -87,7 +107,13 @@
                 @endif
             </div>
         </div>
-
+        <!-- Pengaturan Sistem -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header py-3" style="background: linear-gradient(135deg, #558b8b 0%, #84a9ac 100%); border: none;">
+                <h5 class="mb-0 text-white">
+                    <i class="bi bi-gear me-2"></i>Pengaturan Sistem
+                </h5>
+            </div>
             <div class="card-body">
                 @if(isset($settings['boolean']) && $settings['boolean']->count() > 0)
                     @foreach($settings['boolean'] ?? [] as $setting)
@@ -110,13 +136,6 @@
                         Pengaturan sistem belum tersedia.
                     </div>
                 @endif
-            </div>          <small class="d-block text-muted">
-                                Aktifkan untuk menonaktifkan akses pelanggan sementara
-                            </small>
-                        </label>
-                    </div>
-                    @endif
-                @endforeach
             </div>
         </div>
 

@@ -56,4 +56,20 @@ class OrderAdminController extends Controller
 
         return redirect()->route('admin.orders.show', $id)->with('success', 'Status pesanan berhasil diperbarui!');
     }
+
+    /**
+     * Hapus pesanan.
+     */
+    public function destroy($id)
+    {
+        $order = Order::findOrFail($id);
+        
+        // Hapus order items terlebih dahulu (cascade)
+        $order->items()->delete();
+        
+        // Hapus order
+        $order->delete();
+
+        return redirect()->route('admin.orders.index')->with('success', 'Pesanan berhasil dihapus!');
+    }
 }

@@ -1,5 +1,12 @@
 <x-admin-layout title="Manajemen Pesanan" page-title="Daftar Pesanan Masuk">
 <div class="container-fluid">
+    @if(session('success'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle"></i> {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
     <div class="table-container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h5 class="mb-0">Semua Pesanan</h5>
@@ -48,6 +55,13 @@
                             <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-primary">
                                 <i class="bi bi-eye"></i> Detail
                             </a>
+                            <form action="{{ route('admin.orders.destroy', $order->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus pesanan #{{ $order->id }}? Data tidak dapat dikembalikan!')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus Pesanan">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @empty
