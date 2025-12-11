@@ -18,13 +18,13 @@ Cukup ketik salah satu bentuk wajah seperti: oval, bulat, persegi, hati, berlian
         // Mapping bentuk wajah ke produk
         $mapping = [
             'oval' => 'Kacamata Retro',
-            'bulat' => 'Kacamata Modern',
-            'persegi' => 'Kacamata Stylish',
-            'hati' => 'Kacamata Stylish',
+            'bulat' => 'Kacamata Metal Cat-Eye Premium',
+            'persegi' => 'Aeris Round Metal Optics',
+            'hati' => 'Kacamata Rectangular Vintage Metal',
             'berlian' => 'Kacamata Retro',
             'segitiga' => 'Kacamata Retro',
-            'panjang' => 'Kacamata Stylish',
-            'lonjong' => 'Kacamata Modern'
+            'panjang' => 'Kacamata Oversize Square Classic Black',
+            'lonjong' => 'Kacamata Metal Cat-Eye Premium'
         ];
 
         // Cari kata kunci di input user
